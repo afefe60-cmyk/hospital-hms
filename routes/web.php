@@ -132,6 +132,28 @@ $router->get('/inventory/suppliers', 'InventoryController@suppliers', [AuthMiddl
 $router->post('/inventory/suppliers', 'InventoryController@storeSupplier', [AuthMiddleware::class, CsrfMiddleware::class]);
 $router->get('/inventory/purchase-orders', 'InventoryController@purchaseOrders', [AuthMiddleware::class]);
 
+// Surgery & Operating Rooms OR (Phase 9)
+$router->get('/surgery', 'SurgeryController@index', [AuthMiddleware::class]);
+$router->get('/surgery/create', 'SurgeryController@create', [AuthMiddleware::class]);
+$router->post('/surgery/store', 'SurgeryController@store', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->get('/surgery/show', 'SurgeryController@show', [AuthMiddleware::class]);
+$router->get('/surgery/{id}', 'SurgeryController@show', [AuthMiddleware::class]);
+$router->get('/surgery/print', 'SurgeryController@printReport', [AuthMiddleware::class]);
+$router->get('/surgery/{id}/print', 'SurgeryController@printReport', [AuthMiddleware::class]);
+$router->post('/surgery/update-status', 'SurgeryController@updateStatus', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->post('/surgery/save-anesthesia', 'SurgeryController@saveAnesthesia', [AuthMiddleware::class, CsrfMiddleware::class]);
+
+// Intensive Care Unit ICU (Phase 9)
+$router->get('/icu', 'IcuController@index', [AuthMiddleware::class]);
+$router->get('/icu/create', 'IcuController@create', [AuthMiddleware::class]);
+$router->post('/icu/store', 'IcuController@store', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->get('/icu/show', 'IcuController@show', [AuthMiddleware::class]);
+$router->get('/icu/{id}', 'IcuController@show', [AuthMiddleware::class]);
+$router->get('/icu/print', 'IcuController@printChart', [AuthMiddleware::class]);
+$router->get('/icu/{id}/print', 'IcuController@printChart', [AuthMiddleware::class]);
+$router->post('/icu/record-observation', 'IcuController@recordObservation', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->post('/icu/update-status', 'IcuController@updateStatus', [AuthMiddleware::class, CsrfMiddleware::class]);
+
 // Hospital Structure Routes (Phase 3)
 $router->get('/departments', 'DepartmentController@index', [AuthMiddleware::class]);
 $router->post('/departments', 'DepartmentController@store', [AuthMiddleware::class, CsrfMiddleware::class]);

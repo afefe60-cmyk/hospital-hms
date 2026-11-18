@@ -73,6 +73,14 @@ class RolePermissionSeeder
             ['code' => 'pharmacy.dispense', 'module' => 'Pharmacy', 'action' => 'approve', 'name_ar' => 'صرف الأدوية للمرضى', 'name_en' => 'Dispense Medicines'],
             ['code' => 'inventory.manage', 'module' => 'Inventory', 'action' => 'edit', 'name_ar' => 'إدارة المخازن والجرد', 'name_en' => 'Manage Inventory'],
 
+            // Surgery & ICU
+            ['code' => 'surgery.view', 'module' => 'Surgery', 'action' => 'view', 'name_ar' => 'عرض جدول العمليات الجراحية', 'name_en' => 'View Surgery Schedule'],
+            ['code' => 'surgery.schedule', 'module' => 'Surgery', 'action' => 'create', 'name_ar' => 'جدولة العمليات وحجز الغرف', 'name_en' => 'Schedule Surgeries'],
+            ['code' => 'surgery.record', 'module' => 'Surgery', 'action' => 'edit', 'name_ar' => 'توثيق تقرير الجراحة والتخدير', 'name_en' => 'Record Surgery & Anesthesia'],
+            ['code' => 'icu.view', 'module' => 'ICU', 'action' => 'view', 'name_ar' => 'عرض مرضى العناية المركزة', 'name_en' => 'View ICU Patients'],
+            ['code' => 'icu.manage', 'module' => 'ICU', 'action' => 'edit', 'name_ar' => 'إدخال وتخريج مرضى العناية', 'name_en' => 'Manage ICU Stays'],
+            ['code' => 'icu.observe', 'module' => 'ICU', 'action' => 'create', 'name_ar' => 'تسجيل المؤشرات الحيوية والملاحظات بالعناية', 'name_en' => 'Record ICU Observations'],
+
             // Billing & Finance
             ['code' => 'billing.invoices.create', 'module' => 'Billing', 'action' => 'create', 'name_ar' => 'إصدار الفواتير العلاجية', 'name_en' => 'Create Invoices'],
             ['code' => 'billing.payments.collect', 'module' => 'Billing', 'action' => 'create', 'name_ar' => 'تحصيل المدفوعات وإصدار سند قبض', 'name_en' => 'Collect Payments'],

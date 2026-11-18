@@ -201,6 +201,20 @@ $user = current_user();
                         </li>
 
                         <li class="nav-item">
+                            <a class="nav-link nav-link-hms <?= active_route('/surgery') ?>" href="<?= url('/surgery') ?>">
+                                <i data-lucide="scissors" style="width: 16px; height: 16px; display:inline-block; vertical-align:text-bottom;"></i>
+                                العمليات OR
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-hms <?= active_route('/icu') ?>" href="<?= url('/icu') ?>">
+                                <i data-lucide="activity" style="width: 16px; height: 16px; display:inline-block; vertical-align:text-bottom; color: #F87171;"></i>
+                                العناية المركزة ICU
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
                             <a class="nav-link nav-link-hms <?= active_route('/lab') ?>" href="<?= url('/lab') ?>">
                                 <i data-lucide="test-tube-2" style="width: 16px; height: 16px; display:inline-block; vertical-align:text-bottom;"></i>
                                 المختبرات LIS
