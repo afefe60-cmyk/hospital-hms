@@ -312,6 +312,13 @@ $user = current_user();
                             </a>
                         </li>
 
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-hms <?= active_route('/hr') ?>" href="<?= url('/hr') ?>">
+                                <i data-lucide="calendar-check" style="width: 16px; height: 16px; display:inline-block; vertical-align:text-bottom; color: #F59E0B;"></i>
+                                الموارد البشرية والرواتب
+                            </a>
+                        </li>
+
                         <?php if (can('users.view')): ?>
                             <li class="nav-item">
                                 <a class="nav-link nav-link-hms <?= active_route('/users') ?>" href="<?= url('/users') ?>">

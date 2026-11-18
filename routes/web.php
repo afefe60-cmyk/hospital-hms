@@ -217,3 +217,18 @@ $router->post('/roles/{id}/permissions', 'RoleController@updatePermissions', [Au
 
 // Audit Logs
 $router->get('/audit-logs', 'AuditLogController@index', [AuthMiddleware::class]);
+
+// Human Resources (HR), Rosters & Payroll (Phase 12)
+$router->get('/hr', 'HrController@index', [AuthMiddleware::class]);
+$router->get('/hr/roster', 'HrController@roster', [AuthMiddleware::class]);
+$router->post('/hr/roster', 'HrController@storeRoster', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->post('/hr/roster/update-status', 'HrController@updateRosterStatus', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->get('/hr/leaves', 'HrController@leaves', [AuthMiddleware::class]);
+$router->post('/hr/leaves', 'HrController@storeLeave', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->post('/hr/leaves/update-status', 'HrController@updateLeaveStatus', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->get('/hr/payroll', 'HrController@payroll', [AuthMiddleware::class]);
+$router->post('/hr/payroll/generate', 'HrController@generatePayroll', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->get('/hr/payroll/print-sheet', 'HrController@printPayrollSheet', [AuthMiddleware::class]);
+$router->get('/hr/payroll/{id}', 'HrController@showPayroll', [AuthMiddleware::class]);
+$router->post('/hr/payroll/pay', 'HrController@paySalary', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->get('/hr/payroll/print/{id}', 'HrController@printPayslip', [AuthMiddleware::class]);
