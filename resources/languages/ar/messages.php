@@ -1,0 +1,27 @@
+<?php
+
+return [
+    'app_name' => 'نظام إدارة المستشفيات المتكامل',
+    'hospital_hms' => 'HOSPITAL HMS',
+    'system_overview' => 'نظرة عامة على حالة النظام',
+    'welcome_title' => 'مرحباً بك في نظام HOSPITAL HMS',
+    'welcome_subtitle' => 'نظام إدارة مستشفيات متكامل - بنية MVC مخصصة ومبنية لمعايير الجودة الطبية والمالية',
+    'phase_1_status' => 'اكتمال المرحلة 1 (PHASE 1): البنية التحتية، الاتصال بقاعدة البيانات، والموجّه (Router)',
+    'operational_readiness' => 'جاهزية التشغيل الفني',
+    'database_connected' => 'قاعدة البيانات متصلة وجاهزة (MySQL 8 InnoDB)',
+    'database_failed' => 'فشل الاتصال بقاعدة البيانات',
+    'php_version' => 'إصدار PHP',
+    'server_time' => 'توقيت الخادم (السودان)',
+    'currency' => 'العملة الأساسية',
+    'active_language' => 'اللغة الحالية',
+    'arabic' => 'العربية (RTL)',
+    'english' => 'الإنجليزية (LTR)',
+    'modules_ready' => 'الوحدات المجدولة للتنفيذ',
+    'phase_progress' => 'تقدم المراحل',
+    'next_phase' => 'المرحلة التالية: PHASE 2 (المصادقة، المستخدمون، الصلاحيات RBAC، وسجل التدقيق)',
+    'actions' => 'الإجراءات',
+    'switch_to_en' => 'English',
+    'switch_to_ar' => 'العربية',
+    'footer_text' => 'جميع الحقوق محفوظة © HOSPITAL HMS - تصميم مؤسسي مخصص للقطاع الصحي بالسودان',
+    'status_online' => 'يعمل بكفاءة',
+];

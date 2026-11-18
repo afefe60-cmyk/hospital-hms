@@ -1,0 +1,27 @@
+<?php
+
+return [
+    'app_name' => 'Integrated Hospital Management System',
+    'hospital_hms' => 'HOSPITAL HMS',
+    'system_overview' => 'System Status & Overview',
+    'welcome_title' => 'Welcome to HOSPITAL HMS',
+    'welcome_subtitle' => 'Integrated Hospital Management System - Pure PHP Custom MVC Enterprise Architecture',
+    'phase_1_status' => 'PHASE 1 Complete: MVC Core Engine, Database Driver & Router Operational',
+    'operational_readiness' => 'Technical Readiness Status',
+    'database_connected' => 'Database Connected (MySQL 8 InnoDB)',
+    'database_failed' => 'Database Connection Failed',
+    'php_version' => 'PHP Version',
+    'server_time' => 'Server Time (Sudan)',
+    'currency' => 'Base Currency',
+    'active_language' => 'Active Language',
+    'arabic' => 'Arabic (RTL)',
+    'english' => 'English (LTR)',
+    'modules_ready' => 'System Modules Blueprint',
+    'phase_progress' => 'Phase Progress',
+    'next_phase' => 'Next Phase: PHASE 2 (Authentication, Users, Roles & Permissions, Audit Trail)',
+    'actions' => 'Actions',
+    'switch_to_en' => 'English',
+    'switch_to_ar' => 'العربية',
+    'footer_text' => 'All Rights Reserved © HOSPITAL HMS - Enterprise Health Information System',
+    'status_online' => 'Online & Healthy',
+];

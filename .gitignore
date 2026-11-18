@@ -1,0 +1,23 @@
+# Environment & Secrets
+.env
+.env.backup
+.env.local
+
+# Vendor
+/vendor/
+
+# Storage & Uploads
+/storage/logs/*.log
+/storage/uploads/*
+!/storage/uploads/.gitkeep
+/storage/reports/*
+!/storage/reports/.gitkeep
+/storage/backups/*
+!/storage/backups/.gitkeep
+
+# OS & Editor Files
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
