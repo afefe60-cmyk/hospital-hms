@@ -93,6 +93,25 @@ $router->post('/nursing/{id}/care-plan', 'NursingController@addCarePlan', [AuthM
 $router->post('/nursing/mar/{id}', 'NursingController@recordMar', [AuthMiddleware::class, CsrfMiddleware::class]);
 $router->post('/nursing/{id}/mar-dose', 'NursingController@addMarDose', [AuthMiddleware::class, CsrfMiddleware::class]);
 
+// Laboratory Management LIS (Phase 7)
+$router->get('/lab', 'LabController@index', [AuthMiddleware::class]);
+$router->get('/lab/create', 'LabController@create', [AuthMiddleware::class]);
+$router->post('/lab', 'LabController@store', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->get('/lab/{id}', 'LabController@show', [AuthMiddleware::class]);
+$router->post('/lab/{id}/collect-sample', 'LabController@collectSample', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->post('/lab/{id}/results', 'LabController@saveResults', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->post('/lab/{id}/approve', 'LabController@approveResults', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->get('/lab/{id}/print', 'LabController@printReport', [AuthMiddleware::class]);
+
+// Radiology Management RIS (Phase 7)
+$router->get('/radiology', 'RadiologyController@index', [AuthMiddleware::class]);
+$router->get('/radiology/create', 'RadiologyController@create', [AuthMiddleware::class]);
+$router->post('/radiology', 'RadiologyController@store', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->get('/radiology/{id}', 'RadiologyController@show', [AuthMiddleware::class]);
+$router->post('/radiology/{id}/status', 'RadiologyController@updateStatus', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->post('/radiology/{id}/report', 'RadiologyController@saveReport', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->get('/radiology/{id}/print', 'RadiologyController@printReport', [AuthMiddleware::class]);
+
 // Hospital Structure Routes (Phase 3)
 $router->get('/departments', 'DepartmentController@index', [AuthMiddleware::class]);
 $router->post('/departments', 'DepartmentController@store', [AuthMiddleware::class, CsrfMiddleware::class]);

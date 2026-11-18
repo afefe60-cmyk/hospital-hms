@@ -110,8 +110,9 @@ if ($availableBed && $activeBed) {
 }
 
 // 9. Discharge Logic Test
+$uniqueTestAdm = 'ADM-TEST-' . substr(uniqid(), -6);
 $testAdmId = $admModel->create([
-    'admission_number' => 'ADM-TEST-99999',
+    'admission_number' => $uniqueTestAdm,
     'patient_id' => $adm1['patient_id'],
     'admitting_doctor_id' => $adm1['admitting_doctor_id'],
     'department_id' => $adm1['department_id'],

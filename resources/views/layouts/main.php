@@ -201,6 +201,20 @@ $user = current_user();
                         </li>
 
                         <li class="nav-item">
+                            <a class="nav-link nav-link-hms <?= active_route('/lab') ?>" href="<?= url('/lab') ?>">
+                                <i data-lucide="test-tube-2" style="width: 16px; height: 16px; display:inline-block; vertical-align:text-bottom;"></i>
+                                المختبرات LIS
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-hms <?= active_route('/radiology') ?>" href="<?= url('/radiology') ?>">
+                                <i data-lucide="scan" style="width: 16px; height: 16px; display:inline-block; vertical-align:text-bottom;"></i>
+                                الأشعة RIS
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
                             <a class="nav-link nav-link-hms <?= active_route('/patients') ?>" href="<?= url('/patients') ?>">
                                 <i data-lucide="users" style="width: 16px; height: 16px; display:inline-block; vertical-align:text-bottom;"></i>
                                 سجل المرضى
