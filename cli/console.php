@@ -40,6 +40,7 @@ switch ($command) {
             'UserSeeder' => $basePath . '/database/seeders/UserSeeder.php',
             'HospitalStructureSeeder' => $basePath . '/database/seeders/HospitalStructureSeeder.php',
             'PatientSeeder' => $basePath . '/database/seeders/PatientSeeder.php',
+            'EmrCatalogSeeder' => $basePath . '/database/seeders/EmrCatalogSeeder.php',
         ];
 
         foreach ($seeders as $name => $path) {

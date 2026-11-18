@@ -173,6 +173,13 @@ $user = current_user();
                         </li>
 
                         <li class="nav-item">
+                            <a class="nav-link nav-link-hms <?= active_route('/emr') ?>" href="<?= url('/emr') ?>">
+                                <i data-lucide="file-heart" style="width: 16px; height: 16px; display:inline-block; vertical-align:text-bottom;"></i>
+                                عيادة الطبيب EMR
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
                             <a class="nav-link nav-link-hms <?= active_route('/patients') ?>" href="<?= url('/patients') ?>">
                                 <i data-lucide="users" style="width: 16px; height: 16px; display:inline-block; vertical-align:text-bottom;"></i>
                                 سجل المرضى

@@ -59,6 +59,18 @@ $router->get('/queue/display/{id}', 'QueueController@display');
 $router->post('/queue/{id}/call', 'QueueController@callNext', [AuthMiddleware::class, CsrfMiddleware::class]);
 $router->post('/queue/{id}/complete', 'QueueController@complete', [AuthMiddleware::class, CsrfMiddleware::class]);
 
+// EMR & Clinical Encounters (Phase 5)
+$router->get('/emr', 'EmrController@dashboard', [AuthMiddleware::class]);
+$router->post('/emr/visit/{id}/start', 'EmrController@startEncounter', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->get('/emr/encounter/{id}', 'EmrController@encounter', [AuthMiddleware::class]);
+$router->post('/emr/encounter/{id}/vitals', 'EmrController@saveVitals', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->post('/emr/encounter/{id}/notes', 'EmrController@saveNotes', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->post('/emr/encounter/{id}/diagnosis', 'EmrController@addDiagnosis', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->post('/emr/encounter/{id}/prescription', 'EmrController@addPrescription', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->post('/emr/encounter/{id}/order', 'EmrController@addOrder', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->post('/emr/encounter/{id}/complete', 'EmrController@completeEncounter', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->get('/emr/prescription/{id}/print', 'EmrController@printPrescription', [AuthMiddleware::class]);
+
 // Hospital Structure Routes (Phase 3)
 $router->get('/departments', 'DepartmentController@index', [AuthMiddleware::class]);
 $router->post('/departments', 'DepartmentController@store', [AuthMiddleware::class, CsrfMiddleware::class]);
