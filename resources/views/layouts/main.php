@@ -243,6 +243,20 @@ $user = current_user();
                         </li>
 
                         <li class="nav-item">
+                            <a class="nav-link nav-link-hms <?= active_route('/billing') ?>" href="<?= url('/billing') ?>">
+                                <i data-lucide="receipt" style="width: 16px; height: 16px; display:inline-block; vertical-align:text-bottom; color: #34D399;"></i>
+                                الفوترة والتحصيل
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-hms <?= active_route('/cashboxes') ?>" href="<?= url('/cashboxes') ?>">
+                                <i data-lucide="wallet" style="width: 16px; height: 16px; display:inline-block; vertical-align:text-bottom;"></i>
+                                ورديات الصناديق
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
                             <a class="nav-link nav-link-hms <?= active_route('/patients') ?>" href="<?= url('/patients') ?>">
                                 <i data-lucide="users" style="width: 16px; height: 16px; display:inline-block; vertical-align:text-bottom;"></i>
                                 سجل المرضى

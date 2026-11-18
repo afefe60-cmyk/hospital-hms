@@ -154,6 +154,25 @@ $router->get('/icu/{id}/print', 'IcuController@printChart', [AuthMiddleware::cla
 $router->post('/icu/record-observation', 'IcuController@recordObservation', [AuthMiddleware::class, CsrfMiddleware::class]);
 $router->post('/icu/update-status', 'IcuController@updateStatus', [AuthMiddleware::class, CsrfMiddleware::class]);
 
+// Finance, Medical Billing & Payments (Phase 10)
+$router->get('/billing', 'BillingController@index', [AuthMiddleware::class]);
+$router->get('/billing/create', 'BillingController@create', [AuthMiddleware::class]);
+$router->post('/billing/store', 'BillingController@store', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->get('/billing/services', 'BillingController@services', [AuthMiddleware::class]);
+$router->post('/billing/services', 'BillingController@storeService', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->get('/billing/show', 'BillingController@show', [AuthMiddleware::class]);
+$router->get('/billing/{id}', 'BillingController@show', [AuthMiddleware::class]);
+$router->post('/billing/payment', 'BillingController@addPayment', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->get('/billing/{id}/print', 'BillingController@printInvoice', [AuthMiddleware::class]);
+$router->get('/billing/receipt/{id}/print', 'BillingController@printReceipt', [AuthMiddleware::class]);
+
+// Cashbox Shifts & Drawer Reconciliation (Phase 10)
+$router->get('/cashboxes', 'CashboxController@index', [AuthMiddleware::class]);
+$router->post('/cashboxes/open', 'CashboxController@openSession', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->post('/cashboxes/close', 'CashboxController@closeSession', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->get('/cashboxes/sessions/{id}', 'CashboxController@showSession', [AuthMiddleware::class]);
+$router->get('/cashboxes/sessions/{id}/print', 'CashboxController@printSession', [AuthMiddleware::class]);
+
 // Hospital Structure Routes (Phase 3)
 $router->get('/departments', 'DepartmentController@index', [AuthMiddleware::class]);
 $router->post('/departments', 'DepartmentController@store', [AuthMiddleware::class, CsrfMiddleware::class]);
