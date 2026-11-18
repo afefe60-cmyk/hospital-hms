@@ -48,13 +48,11 @@ class Migrator
                 if (class_exists($className)) {
                     $migrationInstance = new $className();
                     if (method_exists($migrationInstance, 'up')) {
-                        $this->db->transaction(function () use ($migrationInstance, $migrationName, $currentBatch) {
-                            $migrationInstance->up();
-                            $this->db->query(
-                                "INSERT INTO `migrations` (`migration`, `batch`) VALUES (:migration, :batch)",
-                                ['migration' => $migrationName, 'batch' => $currentBatch]
-                            );
-                        });
+                        $migrationInstance->up();
+                        $this->db->query(
+                            "INSERT INTO `migrations` (`migration`, `batch`) VALUES (:migration, :batch)",
+                            ['migration' => $migrationName, 'batch' => $currentBatch]
+                        );
                         $newlyApplied[] = $migrationName;
                     }
                 }

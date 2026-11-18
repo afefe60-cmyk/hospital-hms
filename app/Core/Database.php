@@ -113,7 +113,10 @@ class Database
      */
     public function commit(): bool
     {
-        return $this->pdo->commit();
+        if ($this->pdo->inTransaction()) {
+            return $this->pdo->commit();
+        }
+        return true;
     }
 
     /**
@@ -121,7 +124,10 @@ class Database
      */
     public function rollBack(): bool
     {
-        return $this->pdo->rollBack();
+        if ($this->pdo->inTransaction()) {
+            return $this->pdo->rollBack();
+        }
+        return true;
     }
 
     /**

@@ -2,6 +2,7 @@
 $locale = \App\Core\Session::get('locale', config('app.locale', 'ar'));
 $isRtl = ($locale === 'ar');
 $dir = $isRtl ? 'rtl' : 'ltr';
+$user = current_user();
 ?>
 <!DOCTYPE html>
 <html lang="<?= e($locale) ?>" dir="<?= e($dir) ?>" data-bs-theme="light">
@@ -18,7 +19,7 @@ $dir = $isRtl ? 'rtl' : 'ltr';
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <?php endif; ?>
 
-    <!-- Google Fonts: Cairo for Arabic, Inter for English -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -51,7 +52,6 @@ $dir = $isRtl ? 'rtl' : 'ltr';
             color: #E2E8F0;
         }
 
-        /* Top Navbar */
         .hms-navbar {
             background-color: var(--hms-navy);
             border-bottom: 3px solid var(--hms-green);
@@ -72,16 +72,23 @@ $dir = $isRtl ? 'rtl' : 'ltr';
             border-radius: 4px;
         }
 
-        /* Cards & Components */
+        .nav-link-hms {
+            color: rgba(255, 255, 255, 0.85) !important;
+            font-weight: 500;
+            padding: 8px 14px !important;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+        .nav-link-hms:hover, .nav-link-hms.active {
+            color: #FFFFFF !important;
+            background-color: rgba(255, 255, 255, 0.12);
+        }
+
         .card-hms {
             border: 1px solid var(--hms-gray);
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(23, 59, 89, 0.05);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .card-hms:hover {
-            box-shadow: 0 8px 25px rgba(23, 59, 89, 0.1);
         }
 
         .text-navy { color: var(--hms-navy) !important; }
@@ -144,24 +151,99 @@ $dir = $isRtl ? 'rtl' : 'ltr';
                 <span class="badge-hms">Core v1.0</span>
             </a>
 
-            <div class="d-flex align-items-center gap-3">
-                <!-- Theme Mode Toggle -->
-                <button class="btn btn-sm btn-outline-light d-flex align-items-center gap-1" id="themeToggleBtn" title="تبديل الوضع">
-                    <i data-lucide="moon" id="themeIcon" style="width: 18px; height: 18px;"></i>
-                </button>
+            <button class="navbar-toggler text-white border-0" type="button" data-bs-toggle="collapse" data-bs-target="#hmsNavbar">
+                <i data-lucide="menu"></i>
+            </button>
 
-                <!-- Language Switcher -->
-                <?php if ($locale === 'ar'): ?>
-                    <a href="<?= url('/lang?lang=en') ?>" class="btn btn-sm btn-light fw-bold px-3">
-                        <i data-lucide="globe" style="width: 16px; height: 16px; display:inline-block; vertical-align:text-bottom;"></i>
-                        English
-                    </a>
-                <?php else: ?>
-                    <a href="<?= url('/lang?lang=ar') ?>" class="btn btn-sm btn-light fw-bold px-3">
-                        <i data-lucide="globe" style="width: 16px; height: 16px; display:inline-block; vertical-align:text-bottom;"></i>
-                        العربية
-                    </a>
-                <?php endif; ?>
+            <div class="collapse navbar-collapse" id="hmsNavbar">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-hms <?= active_route('/') ?>" href="<?= url('/') ?>">
+                            <i data-lucide="layout-dashboard" style="width: 16px; height: 16px; display:inline-block; vertical-align:text-bottom;"></i>
+                            لوحة التحكم
+                        </a>
+                    </li>
+
+                    <?php if (auth()->check()): ?>
+                        <?php if (can('users.view')): ?>
+                            <li class="nav-item">
+                                <a class="nav-link nav-link-hms <?= active_route('/users') ?>" href="<?= url('/users') ?>">
+                                    <i data-lucide="users" style="width: 16px; height: 16px; display:inline-block; vertical-align:text-bottom;"></i>
+                                    المستخدمين
+                                </a>
+                            </li>
+                        <?php endif; ?>
+
+                        <?php if (can('roles.manage')): ?>
+                            <li class="nav-item">
+                                <a class="nav-link nav-link-hms <?= active_route('/roles') ?>" href="<?= url('/roles') ?>">
+                                    <i data-lucide="shield-alert" style="width: 16px; height: 16px; display:inline-block; vertical-align:text-bottom;"></i>
+                                    الأدوار والصلاحيات
+                                </a>
+                            </li>
+                        <?php endif; ?>
+
+                        <?php if (can('audit.view')): ?>
+                            <li class="nav-item">
+                                <a class="nav-link nav-link-hms <?= active_route('/audit-logs') ?>" href="<?= url('/audit-logs') ?>">
+                                    <i data-lucide="clipboard-list" style="width: 16px; height: 16px; display:inline-block; vertical-align:text-bottom;"></i>
+                                    سجل التدقيق
+                                </a>
+                            </li>
+                        <?php endif; ?>
+                    <?php endif; ?>
+                </ul>
+
+                <div class="d-flex align-items-center gap-3">
+                    <!-- Theme Mode Toggle -->
+                    <button class="btn btn-sm btn-outline-light d-flex align-items-center gap-1" id="themeToggleBtn" title="تبديل الوضع">
+                        <i data-lucide="moon" id="themeIcon" style="width: 18px; height: 18px;"></i>
+                    </button>
+
+                    <!-- Language Switcher -->
+                    <?php if ($locale === 'ar'): ?>
+                        <a href="<?= url('/lang?lang=en') ?>" class="btn btn-sm btn-light fw-bold px-2 py-1">EN</a>
+                    <?php else: ?>
+                        <a href="<?= url('/lang?lang=ar') ?>" class="btn btn-sm btn-light fw-bold px-2 py-1">عربي</a>
+                    <?php endif; ?>
+
+                    <!-- User Dropdown or Login Button -->
+                    <?php if (auth()->check()): ?>
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-outline-light dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
+                                <i data-lucide="user-check" style="width: 16px; height: 16px;"></i>
+                                <span><?= e($user['full_name'] ?? 'المستخدم') ?></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end shadow">
+                                <li>
+                                    <span class="dropdown-item-text text-muted small">@<?= e($user['username']) ?></span>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center gap-2" href="<?= url('/profile') ?>">
+                                        <i data-lucide="user" style="width: 16px; height: 16px;"></i>
+                                        الملف الشخصي
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form action="<?= url('/logout') ?>" method="POST">
+                                        <?= csrf_field() ?>
+                                        <button type="submit" class="dropdown-item text-danger d-flex align-items-center gap-2">
+                                            <i data-lucide="log-out" style="width: 16px; height: 16px;"></i>
+                                            تسجيل الخروج
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    <?php else: ?>
+                        <a href="<?= url('/login') ?>" class="btn btn-sm btn-light fw-bold px-3">
+                            <i data-lucide="log-in" style="width: 16px; height: 16px; display:inline-block; vertical-align:text-bottom;"></i>
+                            تسجيل الدخول
+                        </a>
+                    <?php endif; ?>
+                </div>
             </div>
         </div>
     </nav>
@@ -169,6 +251,31 @@ $dir = $isRtl ? 'rtl' : 'ltr';
     <!-- Main Body Container -->
     <main class="py-4 flex-grow-1">
         <div class="container-fluid px-4">
+            <!-- Flash Notifications -->
+            <?php if (\App\Core\Session::hasFlash('success')): ?>
+                <div class="alert alert-success alert-dismissible fade show d-flex align-items-center gap-2 mb-4" role="alert">
+                    <i data-lucide="check-circle" style="width: 20px; height: 20px; flex-shrink: 0;"></i>
+                    <div><?= e(\App\Core\Session::getFlash('success')) ?></div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            <?php endif; ?>
+
+            <?php if (\App\Core\Session::hasFlash('error')): ?>
+                <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center gap-2 mb-4" role="alert">
+                    <i data-lucide="alert-octagon" style="width: 20px; height: 20px; flex-shrink: 0;"></i>
+                    <div><?= e(\App\Core\Session::getFlash('error')) ?></div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            <?php endif; ?>
+
+            <?php if (\App\Core\Session::hasFlash('info')): ?>
+                <div class="alert alert-info alert-dismissible fade show d-flex align-items-center gap-2 mb-4" role="alert">
+                    <i data-lucide="info" style="width: 20px; height: 20px; flex-shrink: 0;"></i>
+                    <div><?= e(\App\Core\Session::getFlash('info')) ?></div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            <?php endif; ?>
+
             <?= $content ?>
         </div>
     </main>
@@ -185,15 +292,12 @@ $dir = $isRtl ? 'rtl' : 'ltr';
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        // Initialize Lucide Icons
         lucide.createIcons();
 
-        // Dark/Light Mode Switcher
         const themeToggleBtn = document.getElementById('themeToggleBtn');
         const themeIcon = document.getElementById('themeIcon');
         const htmlElement = document.documentElement;
 
-        // Check stored theme preference
         const currentTheme = localStorage.getItem('hms_theme') || 'light';
         htmlElement.setAttribute('data-bs-theme', currentTheme);
         updateThemeIcon(currentTheme);

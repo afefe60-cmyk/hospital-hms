@@ -33,6 +33,24 @@ switch ($command) {
         }
         break;
 
+    case 'seed':
+        echo "Running Database Seeders...\n";
+        $seeders = [
+            'RolePermissionSeeder' => $basePath . '/database/seeders/RolePermissionSeeder.php',
+            'UserSeeder' => $basePath . '/database/seeders/UserSeeder.php',
+        ];
+
+        foreach ($seeders as $name => $path) {
+            if (file_exists($path)) {
+                require_once $path;
+                $seeder = new $name();
+                $seeder->run();
+                echo " [✓] Seeded: {$name}\n";
+            }
+        }
+        echo "Database seeding completed successfully.\n";
+        break;
+
     case 'status':
         echo "Checking Database Connection...\n";
         try {

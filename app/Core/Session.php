@@ -31,8 +31,8 @@ class Session
             ]);
         }
 
-        if (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) {
-            session_start();
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            @session_start();
         }
         self::$started = true;
 
@@ -66,17 +66,20 @@ class Session
 
     public static function destroy(): void
     {
+        $_SESSION = [];
         if (session_status() === PHP_SESSION_ACTIVE) {
-            session_unset();
-            session_destroy();
+            @session_unset();
+            @session_destroy();
             self::$started = false;
         }
     }
 
     public static function regenerate(bool $deleteOldSession = true): bool
     {
-        self::start();
-        return session_regenerate_id($deleteOldSession);
+        if (session_status() === PHP_SESSION_ACTIVE && !headers_sent()) {
+            return @session_regenerate_id($deleteOldSession);
+        }
+        return true;
     }
 
     /**

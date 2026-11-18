@@ -147,3 +147,35 @@ if (!function_exists('active_route')) {
         return '';
     }
 }
+
+if (!function_exists('auth')) {
+    function auth(): \App\Services\AuthService
+    {
+        static $authService = null;
+        if ($authService === null) {
+            $authService = new \App\Services\AuthService();
+        }
+        return $authService;
+    }
+}
+
+if (!function_exists('can')) {
+    function can(string $permission): bool
+    {
+        return auth()->can($permission);
+    }
+}
+
+if (!function_exists('has_role')) {
+    function has_role(string $role): bool
+    {
+        return auth()->hasRole($role);
+    }
+}
+
+if (!function_exists('current_user')) {
+    function current_user(): ?array
+    {
+        return auth()->user();
+    }
+}
