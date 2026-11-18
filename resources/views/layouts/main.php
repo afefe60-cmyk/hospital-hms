@@ -215,6 +215,20 @@ $user = current_user();
                         </li>
 
                         <li class="nav-item">
+                            <a class="nav-link nav-link-hms <?= active_route('/pharmacy') ?>" href="<?= url('/pharmacy') ?>">
+                                <i data-lucide="pill" style="width: 16px; height: 16px; display:inline-block; vertical-align:text-bottom;"></i>
+                                الصيدلية
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-hms <?= active_route('/inventory') ?>" href="<?= url('/inventory') ?>">
+                                <i data-lucide="boxes" style="width: 16px; height: 16px; display:inline-block; vertical-align:text-bottom;"></i>
+                                المخازن والمستودعات
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
                             <a class="nav-link nav-link-hms <?= active_route('/patients') ?>" href="<?= url('/patients') ?>">
                                 <i data-lucide="users" style="width: 16px; height: 16px; display:inline-block; vertical-align:text-bottom;"></i>
                                 سجل المرضى

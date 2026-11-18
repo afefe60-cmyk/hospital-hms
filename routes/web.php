@@ -112,6 +112,26 @@ $router->post('/radiology/{id}/status', 'RadiologyController@updateStatus', [Aut
 $router->post('/radiology/{id}/report', 'RadiologyController@saveReport', [AuthMiddleware::class, CsrfMiddleware::class]);
 $router->get('/radiology/{id}/print', 'RadiologyController@printReport', [AuthMiddleware::class]);
 
+// Pharmacy Management & Dispensing (Phase 8)
+$router->get('/pharmacy', 'PharmacyController@index', [AuthMiddleware::class]);
+$router->get('/pharmacy/dispense', 'PharmacyController@dispense', [AuthMiddleware::class]);
+$router->get('/pharmacy/dispense/{id}', 'PharmacyController@dispense', [AuthMiddleware::class]);
+$router->post('/pharmacy/dispense', 'PharmacyController@storeDispense', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->get('/pharmacy/receipt/{id}', 'PharmacyController@receipt', [AuthMiddleware::class]);
+$router->get('/pharmacy/receipt/{id}/print', 'PharmacyController@printReceipt', [AuthMiddleware::class]);
+
+// Inventory & Warehouses Management (Phase 8)
+$router->get('/inventory', 'InventoryController@index', [AuthMiddleware::class]);
+$router->get('/inventory/medicines', 'InventoryController@medicines', [AuthMiddleware::class]);
+$router->get('/inventory/medicines/create', 'InventoryController@createMedicine', [AuthMiddleware::class]);
+$router->post('/inventory/medicines', 'InventoryController@storeMedicine', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->get('/inventory/batches', 'InventoryController@batches', [AuthMiddleware::class]);
+$router->get('/inventory/batches/create', 'InventoryController@createBatch', [AuthMiddleware::class]);
+$router->post('/inventory/batches', 'InventoryController@storeBatch', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->get('/inventory/suppliers', 'InventoryController@suppliers', [AuthMiddleware::class]);
+$router->post('/inventory/suppliers', 'InventoryController@storeSupplier', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->get('/inventory/purchase-orders', 'InventoryController@purchaseOrders', [AuthMiddleware::class]);
+
 // Hospital Structure Routes (Phase 3)
 $router->get('/departments', 'DepartmentController@index', [AuthMiddleware::class]);
 $router->post('/departments', 'DepartmentController@store', [AuthMiddleware::class, CsrfMiddleware::class]);
