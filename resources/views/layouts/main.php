@@ -180,6 +180,27 @@ $user = current_user();
                         </li>
 
                         <li class="nav-item">
+                            <a class="nav-link nav-link-hms <?= active_route('/emergency') ?>" href="<?= url('/emergency') ?>">
+                                <i data-lucide="ambulance" style="width: 16px; height: 16px; display:inline-block; vertical-align:text-bottom; color: #F87171;"></i>
+                                الطوارئ ER
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-hms <?= active_route('/admissions') ?>" href="<?= url('/admissions') ?>">
+                                <i data-lucide="bed-double" style="width: 16px; height: 16px; display:inline-block; vertical-align:text-bottom;"></i>
+                                التنويم IPD
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-hms <?= active_route('/nursing') ?>" href="<?= url('/nursing') ?>">
+                                <i data-lucide="clipboard-check" style="width: 16px; height: 16px; display:inline-block; vertical-align:text-bottom;"></i>
+                                التمريض MAR
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
                             <a class="nav-link nav-link-hms <?= active_route('/patients') ?>" href="<?= url('/patients') ?>">
                                 <i data-lucide="users" style="width: 16px; height: 16px; display:inline-block; vertical-align:text-bottom;"></i>
                                 سجل المرضى

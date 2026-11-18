@@ -71,6 +71,28 @@ $router->post('/emr/encounter/{id}/order', 'EmrController@addOrder', [AuthMiddle
 $router->post('/emr/encounter/{id}/complete', 'EmrController@completeEncounter', [AuthMiddleware::class, CsrfMiddleware::class]);
 $router->get('/emr/prescription/{id}/print', 'EmrController@printPrescription', [AuthMiddleware::class]);
 
+// Emergency & Triage (Phase 6)
+$router->get('/emergency', 'EmergencyController@index', [AuthMiddleware::class]);
+$router->get('/emergency/create', 'EmergencyController@create', [AuthMiddleware::class]);
+$router->post('/emergency', 'EmergencyController@store', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->get('/emergency/{id}', 'EmergencyController@show', [AuthMiddleware::class]);
+$router->post('/emergency/{id}/status', 'EmergencyController@updateStatus', [AuthMiddleware::class, CsrfMiddleware::class]);
+
+// Inpatient Admissions & Bed Allocation IPD (Phase 6)
+$router->get('/admissions', 'AdmissionController@index', [AuthMiddleware::class]);
+$router->get('/admissions/create', 'AdmissionController@create', [AuthMiddleware::class]);
+$router->post('/admissions', 'AdmissionController@store', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->get('/admissions/{id}', 'AdmissionController@show', [AuthMiddleware::class]);
+$router->post('/admissions/{id}/transfer-bed', 'AdmissionController@transferBed', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->post('/admissions/{id}/discharge', 'AdmissionController@discharge', [AuthMiddleware::class, CsrfMiddleware::class]);
+
+// Nursing Station & MAR (Phase 6)
+$router->get('/nursing', 'NursingController@index', [AuthMiddleware::class]);
+$router->post('/nursing/{id}/note', 'NursingController@addNote', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->post('/nursing/{id}/care-plan', 'NursingController@addCarePlan', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->post('/nursing/mar/{id}', 'NursingController@recordMar', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->post('/nursing/{id}/mar-dose', 'NursingController@addMarDose', [AuthMiddleware::class, CsrfMiddleware::class]);
+
 // Hospital Structure Routes (Phase 3)
 $router->get('/departments', 'DepartmentController@index', [AuthMiddleware::class]);
 $router->post('/departments', 'DepartmentController@store', [AuthMiddleware::class, CsrfMiddleware::class]);
