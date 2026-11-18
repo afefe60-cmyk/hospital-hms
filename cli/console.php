@@ -38,6 +38,7 @@ switch ($command) {
         $seeders = [
             'RolePermissionSeeder' => $basePath . '/database/seeders/RolePermissionSeeder.php',
             'UserSeeder' => $basePath . '/database/seeders/UserSeeder.php',
+            'HospitalStructureSeeder' => $basePath . '/database/seeders/HospitalStructureSeeder.php',
         ];
 
         foreach ($seeders as $name => $path) {

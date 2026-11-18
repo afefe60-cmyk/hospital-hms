@@ -165,6 +165,41 @@ $user = current_user();
                     </li>
 
                     <?php if (auth()->check()): ?>
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-hms <?= active_route('/departments') ?>" href="<?= url('/departments') ?>">
+                                <i data-lucide="building" style="width: 16px; height: 16px; display:inline-block; vertical-align:text-bottom;"></i>
+                                الأقسام
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-hms <?= active_route('/clinics') ?>" href="<?= url('/clinics') ?>">
+                                <i data-lucide="stethoscope" style="width: 16px; height: 16px; display:inline-block; vertical-align:text-bottom;"></i>
+                                العيادات
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-hms <?= active_route('/doctors') ?>" href="<?= url('/doctors') ?>">
+                                <i data-lucide="user-plus" style="width: 16px; height: 16px; display:inline-block; vertical-align:text-bottom;"></i>
+                                الأطباء
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-hms <?= active_route('/beds') ?>" href="<?= url('/beds') ?>">
+                                <i data-lucide="bed" style="width: 16px; height: 16px; display:inline-block; vertical-align:text-bottom;"></i>
+                                خريطة الأسرة
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-hms <?= active_route('/employees') ?>" href="<?= url('/employees') ?>">
+                                <i data-lucide="badge-percent" style="width: 16px; height: 16px; display:inline-block; vertical-align:text-bottom;"></i>
+                                الكوادر
+                            </a>
+                        </li>
+
                         <?php if (can('users.view')): ?>
                             <li class="nav-item">
                                 <a class="nav-link nav-link-hms <?= active_route('/users') ?>" href="<?= url('/users') ?>">

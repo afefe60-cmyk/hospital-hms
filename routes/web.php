@@ -36,6 +36,22 @@ $router->post('/logout', 'AuthController@logout', [AuthMiddleware::class, CsrfMi
 $router->get('/profile', 'AuthController@profile', [AuthMiddleware::class]);
 $router->post('/profile/password', 'AuthController@updatePassword', [AuthMiddleware::class, CsrfMiddleware::class]);
 
+// Hospital Structure Routes (Phase 3)
+$router->get('/departments', 'DepartmentController@index', [AuthMiddleware::class]);
+$router->post('/departments', 'DepartmentController@store', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->post('/departments/{id}/toggle-status', 'DepartmentController@toggleStatus', [AuthMiddleware::class, CsrfMiddleware::class]);
+
+$router->get('/clinics', 'ClinicController@index', [AuthMiddleware::class]);
+$router->post('/clinics', 'ClinicController@store', [AuthMiddleware::class, CsrfMiddleware::class]);
+
+$router->get('/doctors', 'DoctorController@index', [AuthMiddleware::class]);
+
+$router->get('/employees', 'EmployeeController@index', [AuthMiddleware::class]);
+$router->post('/employees', 'EmployeeController@store', [AuthMiddleware::class, CsrfMiddleware::class]);
+
+$router->get('/beds', 'BedController@index', [AuthMiddleware::class]);
+$router->post('/beds/{id}/status', 'BedController@updateStatus', [AuthMiddleware::class, CsrfMiddleware::class]);
+
 // Users Management Routes
 $router->get('/users', 'UserController@index', [AuthMiddleware::class]);
 $router->get('/users/create', 'UserController@create', [AuthMiddleware::class]);
