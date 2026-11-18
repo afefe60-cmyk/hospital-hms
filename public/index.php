@@ -5,6 +5,15 @@
  * Entry Point
  */
 
+// If requested via PHP CLI server and the file exists, serve it directly
+if (php_sapi_name() === 'cli-server') {
+    $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+    $file = __DIR__ . $path;
+    if (is_file($file)) {
+        return false;
+    }
+}
+
 define('HMS_START', microtime(true));
 
 // Base Path

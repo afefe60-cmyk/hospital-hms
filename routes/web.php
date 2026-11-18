@@ -36,6 +36,29 @@ $router->post('/logout', 'AuthController@logout', [AuthMiddleware::class, CsrfMi
 $router->get('/profile', 'AuthController@profile', [AuthMiddleware::class]);
 $router->post('/profile/password', 'AuthController@updatePassword', [AuthMiddleware::class, CsrfMiddleware::class]);
 
+// Reception & Front Desk (Phase 4)
+$router->get('/reception', 'ReceptionController@index', [AuthMiddleware::class]);
+
+// Patients Management (Phase 4)
+$router->get('/patients', 'PatientController@index', [AuthMiddleware::class]);
+$router->get('/patients/create', 'PatientController@create', [AuthMiddleware::class]);
+$router->post('/patients', 'PatientController@store', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->get('/patients/{id}', 'PatientController@show', [AuthMiddleware::class]);
+$router->post('/patients/{id}/allergies', 'PatientController@addAllergy', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->post('/patients/{id}/conditions', 'PatientController@addCondition', [AuthMiddleware::class, CsrfMiddleware::class]);
+
+// Appointments & Scheduling (Phase 4)
+$router->get('/appointments', 'AppointmentController@index', [AuthMiddleware::class]);
+$router->get('/appointments/create', 'AppointmentController@create', [AuthMiddleware::class]);
+$router->post('/appointments', 'AppointmentController@store', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->post('/appointments/{id}/check-in', 'AppointmentController@checkIn', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->post('/appointments/{id}/cancel', 'AppointmentController@cancel', [AuthMiddleware::class, CsrfMiddleware::class]);
+
+// Queue Management (Phase 4)
+$router->get('/queue/display/{id}', 'QueueController@display');
+$router->post('/queue/{id}/call', 'QueueController@callNext', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->post('/queue/{id}/complete', 'QueueController@complete', [AuthMiddleware::class, CsrfMiddleware::class]);
+
 // Hospital Structure Routes (Phase 3)
 $router->get('/departments', 'DepartmentController@index', [AuthMiddleware::class]);
 $router->post('/departments', 'DepartmentController@store', [AuthMiddleware::class, CsrfMiddleware::class]);

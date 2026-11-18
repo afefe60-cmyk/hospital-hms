@@ -166,6 +166,27 @@ $user = current_user();
 
                     <?php if (auth()->check()): ?>
                         <li class="nav-item">
+                            <a class="nav-link nav-link-hms <?= active_route('/reception') ?>" href="<?= url('/reception') ?>">
+                                <i data-lucide="bell" style="width: 16px; height: 16px; display:inline-block; vertical-align:text-bottom;"></i>
+                                الاستقبال
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-hms <?= active_route('/patients') ?>" href="<?= url('/patients') ?>">
+                                <i data-lucide="users" style="width: 16px; height: 16px; display:inline-block; vertical-align:text-bottom;"></i>
+                                سجل المرضى
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-hms <?= active_route('/appointments') ?>" href="<?= url('/appointments') ?>">
+                                <i data-lucide="calendar" style="width: 16px; height: 16px; display:inline-block; vertical-align:text-bottom;"></i>
+                                المواعيد
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
                             <a class="nav-link nav-link-hms <?= active_route('/departments') ?>" href="<?= url('/departments') ?>">
                                 <i data-lucide="building" style="width: 16px; height: 16px; display:inline-block; vertical-align:text-bottom;"></i>
                                 الأقسام
