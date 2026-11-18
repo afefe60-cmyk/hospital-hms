@@ -173,6 +173,19 @@ $router->post('/cashboxes/close', 'CashboxController@closeSession', [AuthMiddlew
 $router->get('/cashboxes/sessions/{id}', 'CashboxController@showSession', [AuthMiddleware::class]);
 $router->get('/cashboxes/sessions/{id}/print', 'CashboxController@printSession', [AuthMiddleware::class]);
 
+// Health Insurance & Claims Management (Phase 11)
+$router->get('/insurance', 'InsuranceController@index', [AuthMiddleware::class]);
+$router->get('/insurance/companies', 'InsuranceController@companies', [AuthMiddleware::class]);
+$router->post('/insurance/companies', 'InsuranceController@storeCompany', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->get('/insurance/policies', 'InsuranceController@policies', [AuthMiddleware::class]);
+$router->post('/insurance/policies', 'InsuranceController@storePolicy', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->get('/insurance/claims/create', 'InsuranceController@createClaim', [AuthMiddleware::class]);
+$router->post('/insurance/claims', 'InsuranceController@storeClaim', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->get('/insurance/claims/{id}', 'InsuranceController@showClaim', [AuthMiddleware::class]);
+$router->post('/insurance/claims/status', 'InsuranceController@updateClaimStatus', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->get('/insurance/claims/{id}/print', 'InsuranceController@printClaim', [AuthMiddleware::class]);
+$router->get('/insurance/batch/print', 'InsuranceController@printBatch', [AuthMiddleware::class]);
+
 // Hospital Structure Routes (Phase 3)
 $router->get('/departments', 'DepartmentController@index', [AuthMiddleware::class]);
 $router->post('/departments', 'DepartmentController@store', [AuthMiddleware::class, CsrfMiddleware::class]);
