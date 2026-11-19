@@ -39,7 +39,7 @@ $res = new Response();
 
 $content = $homeCtrl->index($req, $res);
 assertTest('HomeController::index returns non-empty string', is_string($content) && strlen($content) > 500);
-assertTest('Executive Banner contains Hospital Name', str_contains($content, 'مستشفى الأمل التخصصي') || str_contains($content, 'حساب بنكك'));
+assertTest('Dashboard contains Operational Title or Shift', str_contains($content, 'لوحة القيادة') || str_contains($content, 'الوردية'));
 assertTest('Dashboard contains Quick Launchpad', str_contains($content, 'مسارات الوصول السريع') || str_contains($content, 'Quick Launchpad'));
 assertTest('Dashboard contains Ward Capacity section', str_contains($content, 'Ward Capacity') || str_contains($content, 'إشغال الأجنحة'));
 assertTest('Dashboard contains Surgical Theater schedule', str_contains($content, 'Surgical Theater') || str_contains($content, 'العمليات الجراحية'));
