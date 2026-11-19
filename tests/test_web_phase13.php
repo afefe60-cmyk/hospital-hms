@@ -82,7 +82,7 @@ assertTest("Workforce HR Report renders with active staff and shift coverage ana
 $printHtml = $reportCtrl->printReport($req, $res);
 assertTest("Printable Executive Report renders standalone with hospital header & signature blocks",
     str_contains($printHtml, 'التقرير التنفيذي والإحصائي الشامل') &&
-    str_contains($printHtml, 'مستشفى الخرطوم التخصصي التعليمي') &&
+    str_contains($printHtml, 'مستشفى الخرطوم التخصصي ') &&
     str_contains($printHtml, 'اعتماد المدير العام للمستشفى'));
 
 // 7. System Settings View (Hospital Identity Tab)
@@ -90,7 +90,7 @@ $settingsHtml = $settingCtrl->index($req, $res);
 assertTest("System Settings page renders with hospital identity and tabs",
     str_contains($settingsHtml, 'إعدادات النظام العامة وتخصيص هوية المستشفى') &&
     str_contains($settingsHtml, 'هوية وبيانات المستشفى') &&
-    str_contains($settingsHtml, 'مستشفى الخرطوم التخصصي التعليمي'));
+    str_contains($settingsHtml, 'مستشفى الخرطوم التخصصي '));
 
 // 8. System Settings Financial Tab (Bankak Settings)
 $_GET['tab'] = 'financial';

@@ -11,7 +11,7 @@ class SystemSettingsSeeder
             // General & Hospital Identity
             [
                 'key' => 'hospital_name_ar',
-                'value' => 'مستشفى الخرطوم التخصصي التعليمي',
+                'value' => 'مستشفى الخرطوم التخصصي ',
                 'group' => 'hospital',
                 'description' => 'اسم المستشفى الرسمي باللغة العربية',
             ],

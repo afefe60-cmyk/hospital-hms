@@ -55,7 +55,7 @@
 <!-- Header -->
 <div class="header-box d-flex justify-content-between align-items-center">
     <div>
-        <h4 class="fw-bold mb-1 text-primary"><?= htmlspecialchars($settings['hospital_name_ar'] ?? 'مستشفى الخرطوم التخصصي التعليمي') ?></h4>
+        <h4 class="fw-bold mb-1 text-primary"><?= htmlspecialchars($settings['hospital_name_ar'] ?? 'مستشفى الخرطوم التخصصي ') ?></h4>
         <div class="text-muted small"><?= htmlspecialchars($settings['hospital_name_en'] ?? 'Khartoum Specialized Teaching Hospital') ?></div>
         <div class="text-muted small"><?= htmlspecialchars($settings['hospital_address'] ?? 'الخرطوم، السودان') ?> &bull; هاتف: <?= htmlspecialchars($settings['hospital_phone'] ?? '+249183770000') ?></div>
     </div>

@@ -9,28 +9,38 @@
 ?>
 
 <div class="row g-4">
-    <!-- 1. Operational Dashboard Title & Shift Strip (بدون تكرار اسم المستشفى المكرر في السايدبار) -->
+    <!-- 1. Operational Dashboard Title & Shift Ribbon (اللون الأخضر المميز للوحة القيادة) -->
     <div class="col-12">
-        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 pt-1 pb-1">
-            <div>
-                <h4 class="fw-bold text-navy mb-0 d-flex align-items-center gap-2">
-                    <i data-lucide="layout-dashboard" class="text-green" style="width: 24px; height: 24px;"></i>
-                    لوحة القيادة والعمليات اليومية
-                </h4>
-                <div class="text-muted small mt-1 d-flex align-items-center gap-2 flex-wrap">
-                    <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-0.5 d-inline-flex align-items-center gap-1">
-                        <span class="p-1 rounded-circle bg-success d-inline-block"></span>
-                        الوردية الصباحية المعتمدة
-                    </span>
-                    <span>&bull;</span>
-                    <span><i data-lucide="calendar" style="width: 13px; height: 13px; display:inline-block; vertical-align:text-bottom;"></i> <?= date('Y-m-d') ?> | <?= date('l') ?></span>
+        <div class="card card-hms py-3 px-4 text-white border-0 shadow-sm" style="background: linear-gradient(135deg, #0A4D3C 0%, #16856D 60%, #10B981 100%); border-radius: 12px;">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="p-2.5 bg-white bg-opacity-20 rounded-3 border border-white border-opacity-25 d-flex align-items-center justify-content-center">
+                        <i data-lucide="layout-dashboard" style="width: 26px; height: 26px; color: #A7F3D0;"></i>
+                    </div>
+                    <div>
+                        <h4 class="fw-bold mb-0 text-white d-flex align-items-center gap-2">
+                            لوحة القيادة والعمليات اليومية
+                        </h4>
+                        <div class="text-light opacity-90 small d-flex align-items-center gap-2 flex-wrap mt-1">
+                            <span class="badge bg-white bg-opacity-20 text-white px-2.5 py-1 border border-white border-opacity-25 d-inline-flex align-items-center gap-1.5 fw-semibold">
+                                <span class="p-1 rounded-circle bg-success d-inline-block"></span>
+                                الوردية الصباحية المعتمدة
+                            </span>
+                            <span>&bull;</span>
+                            <span class="d-flex align-items-center gap-1">
+                                <i data-lucide="calendar" style="width: 14px; height: 14px;"></i>
+                                <?= date('Y-m-d') ?> | <?= date('l') ?>
+                            </span>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div>
-                <a href="<?= url('/reports') ?>" class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1.5 fw-bold shadow-sm px-3 py-1.5" style="border-radius: 8px;">
-                    <i data-lucide="bar-chart-2" style="width: 16px; height: 16px; color: var(--hms-green);"></i>
-                    <span>التقارير الشاملة &larr;</span>
-                </a>
+
+                <div>
+                    <a href="<?= url('/reports') ?>" class="btn btn-light text-navy d-flex align-items-center gap-1.5 fw-bold shadow-sm px-3.5 py-2" style="border-radius: 8px;">
+                        <i data-lucide="bar-chart-2" style="width: 16px; height: 16px; color: var(--hms-green);"></i>
+                        <span>التقارير الشاملة &larr;</span>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -324,48 +334,56 @@
             <?php if (empty($recentSurgeries)): ?>
                 <div class="alert alert-light text-center py-4 text-muted">لا توجد عمليات جراحية مجدولة اليوم</div>
             <?php else: ?>
-                <div class="d-flex flex-column gap-2.5">
-                    <?php foreach ($recentSurgeries as $surg): ?>
-                        <div class="p-3 border rounded-3 bg-light bg-opacity-50">
-                            <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
-                                <div>
-                                    <div class="d-flex align-items-center gap-2 flex-wrap">
-                                        <strong class="text-navy fs-6"><?= e($surg['procedure_name']) ?></strong>
-                                        <span class="badge bg-secondary-subtle text-secondary border">
-                                            <i data-lucide="door-closed" style="width: 12px; height: 12px; display:inline-block; vertical-align:text-bottom;"></i>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0" style="font-size: 0.88rem;">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width: 30%;">العملية الجراحية</th>
+                                <th style="width: 25%;">المريض والملف</th>
+                                <th style="width: 25%;">الجراح والغرفة</th>
+                                <th style="width: 10%;" class="text-center">الوقت</th>
+                                <th style="width: 10%;" class="text-center">الحالة</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($recentSurgeries as $surg): ?>
+                                <tr>
+                                    <td>
+                                        <strong class="text-navy d-block text-truncate" style="max-width: 180px;" title="<?= e($surg['procedure_name']) ?>">
+                                            <?= e($surg['procedure_name']) ?>
+                                        </strong>
+                                        <small class="text-muted font-monospace"><?= e($surg['surgery_number']) ?></small>
+                                    </td>
+                                    <td>
+                                        <span class="fw-semibold text-dark d-block"><?= e($surg['patient_name']) ?></span>
+                                        <small class="text-secondary font-monospace"><?= e($surg['mrn']) ?></small>
+                                    </td>
+                                    <td>
+                                        <span class="d-block text-dark"><?= e($surg['surgeon_name'] ?? 'جراح استشاري') ?></span>
+                                        <small class="text-muted">
+                                            <i data-lucide="door-closed" style="width: 11px; height: 11px; display:inline-block; vertical-align:text-bottom;"></i>
                                             <?= e($surg['operating_room'] ?? 'غرفة العمليات') ?>
+                                        </small>
+                                    </td>
+                                    <td class="text-center text-nowrap">
+                                        <span class="badge bg-light text-navy border fw-bold font-monospace px-2 py-1">
+                                            <i data-lucide="clock" style="width: 11px; height: 11px; display:inline-block; vertical-align:text-bottom; color: var(--hms-green);"></i>
+                                            <?= date('H:i', strtotime($surg['scheduled_start'])) ?>
                                         </span>
-                                    </div>
-                                    <div class="text-muted small mt-1">
-                                        المريض: <strong class="text-dark"><?= e($surg['patient_name']) ?></strong>
-                                        <span class="mx-1.5 text-secondary">&bull;</span>
-                                        <span class="font-monospace text-primary"><?= e($surg['mrn']) ?></span>
-                                    </div>
-                                </div>
-                                <div class="text-end flex-shrink-0">
-                                    <?php if ($surg['status'] === 'completed'): ?>
-                                        <span class="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1 fw-bold">اكتملت العملية</span>
-                                    <?php elseif ($surg['status'] === 'in_progress'): ?>
-                                        <span class="badge bg-danger text-white px-2.5 py-1 fw-bold animate-pulse">جارية الآن</span>
-                                    <?php else: ?>
-                                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2.5 py-1 fw-bold">مجدولة</span>
-                                    <?php endif; ?>
-                                </div>
-                            </div>
-
-                            <div class="d-flex flex-wrap justify-content-between align-items-center small text-muted pt-2 border-top border-light-subtle">
-                                <div class="d-flex align-items-center gap-2">
-                                    <span>الجراح: <strong class="text-dark"><?= e($surg['surgeon_name'] ?? 'جراح استشاري') ?></strong></span>
-                                    <span class="text-secondary">&bull;</span>
-                                    <span class="font-monospace text-muted"><?= e($surg['surgery_number']) ?></span>
-                                </div>
-                                <div class="d-flex align-items-center gap-1.5 text-navy fw-bold">
-                                    <i data-lucide="clock" style="width: 14px; height: 14px; color: var(--hms-green);"></i>
-                                    <span><?= date('H:i', strtotime($surg['scheduled_start'])) ?></span>
-                                </div>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
+                                    </td>
+                                    <td class="text-center text-nowrap">
+                                        <?php if ($surg['status'] === 'completed'): ?>
+                                            <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1 fw-bold">اكتملت</span>
+                                        <?php elseif ($surg['status'] === 'in_progress'): ?>
+                                            <span class="badge bg-danger text-white px-2 py-1 fw-bold animate-pulse">جارية</span>
+                                        <?php else: ?>
+                                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1 fw-bold">مجدولة</span>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
                 </div>
             <?php endif; ?>
         </div>
