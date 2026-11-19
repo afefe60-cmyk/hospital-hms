@@ -116,7 +116,11 @@ class App
                 echo "<pre>" . htmlspecialchars($e->getTraceAsString()) . "</pre>";
                 echo "</div>";
             } else {
-                echo View::render('errors/500', [], 'layouts/main');
+                try {
+                    echo View::render('errors/500', ['exception' => $e], 'layouts/main');
+                } catch (\Throwable $renderEx) {
+                    echo "<!DOCTYPE html><html lang='ar' dir='rtl'><head><meta charset='utf-8'><title>خطأ في النظام</title><style>body{font-family:sans-serif;text-align:center;padding:50px;background:#f8fafc;color:#1e293b;}h1{color:#dc2626;}</style></head><body><h1>500 - حدث خطأ في النظام</h1><p>يرجى التأكد من إعدادات الاتصال بقاعدة البيانات في ملف .env واستيراد الجداول.</p></body></html>";
+                }
             }
         }
         exit;

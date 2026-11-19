@@ -1,0 +1,29 @@
+<?php
+
+/**
+ * Hostinger Production Database Override
+ * Rename this file to database.local.php on Hostinger.
+ * It is completely ignored by Git and will NEVER be overwritten during any re-deployment!
+ */
+
+return [
+    'default' => 'mysql',
+    'connections' => [
+        'mysql' => [
+            'driver' => 'mysql',
+            'host' => 'localhost',
+            'port' => 3306,
+            'database' => 'u978750718_hms',
+            'username' => 'u978750718_hms_user', // اسم المستخدم في هوستنجر
+            'password' => 'YOUR_PASSWORD_HERE',  // كلمة المرور في هوستنجر
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'options' => [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                PDO::ATTR_EMULATE_PREPARES => false,
+                PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci",
+            ],
+        ],
+    ],
+];

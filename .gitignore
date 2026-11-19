@@ -2,6 +2,8 @@
 .env
 .env.backup
 .env.local
+config/database.local.php
+config/*.local.php
 
 # Vendor
 /vendor/

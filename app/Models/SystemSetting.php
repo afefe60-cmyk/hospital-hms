@@ -21,13 +21,17 @@ class SystemSetting extends Model
      */
     public static function get(string $key, mixed $default = null): mixed
     {
-        $instance = new self();
-        $row = $instance->db->fetchOne(
-            "SELECT `setting_value` FROM `system_settings` WHERE `setting_key` = :key LIMIT 1",
-            ['key' => $key]
-        );
+        try {
+            $instance = new self();
+            $row = $instance->db->fetchOne(
+                "SELECT `setting_value` FROM `system_settings` WHERE `setting_key` = :key LIMIT 1",
+                ['key' => $key]
+            );
 
-        return ($row && isset($row['setting_value'])) ? $row['setting_value'] : $default;
+            return ($row && isset($row['setting_value'])) ? $row['setting_value'] : $default;
+        } catch (\Throwable $e) {
+            return $default;
+        }
     }
 
     /**
