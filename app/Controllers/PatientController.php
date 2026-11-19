@@ -161,6 +161,11 @@ class PatientController extends Controller
         $conditions = $this->patientModel->conditions((int)$id);
         $appointments = $this->patientModel->appointments((int)$id);
         $visits = $this->patientModel->visits((int)$id);
+        $admissions = $this->patientModel->admissions((int)$id);
+        $labOrders = $this->patientModel->labOrders((int)$id);
+        $radiologyOrders = $this->patientModel->radiologyOrders((int)$id);
+        $invoices = $this->patientModel->invoices((int)$id);
+        $surgeries = $this->patientModel->surgeries((int)$id);
 
         // Audit view of sensitive clinical record
         AuditLog::log('VIEW_PATIENT_FILE', 'patients', $id);
@@ -172,7 +177,41 @@ class PatientController extends Controller
             'conditions' => $conditions,
             'appointments' => $appointments,
             'visits' => $visits,
+            'admissions' => $admissions,
+            'labOrders' => $labOrders,
+            'radiologyOrders' => $radiologyOrders,
+            'invoices' => $invoices,
+            'surgeries' => $surgeries,
         ]);
+    }
+
+    /**
+     * Printable Unified Medical ID Card (بطاقة المريض الطبية الموحدة)
+     */
+    public function printCard(Request $request, Response $response, string $id): string
+    {
+        if (!can('patients.view')) {
+            Session::flash('error', 'غير مصرح.');
+            $this->redirect(url('/patients'));
+        }
+
+        $patient = $this->patientModel->find($id);
+        if (!$patient) {
+            Session::flash('error', 'ملف المريض غير موجود.');
+            $this->redirect(url('/patients'));
+        }
+
+        $allergies = $this->patientModel->allergies((int)$id);
+        $conditions = $this->patientModel->conditions((int)$id);
+
+        AuditLog::log('PRINT_PATIENT_CARD', 'patients', $id);
+
+        return $this->view('patients/print_card', [
+            'pageTitle' => "بطاقة المريض: {$patient['mrn']}",
+            'patient' => $patient,
+            'allergies' => $allergies,
+            'conditions' => $conditions,
+        ], null); // Render without layout for direct card printing
     }
 
     public function addAllergy(Request $request, Response $response, string $id): void

@@ -141,4 +141,71 @@ class Patient extends Model
                 ORDER BY v.id DESC";
         return $this->db->fetchAll($sql, ['id' => $patientId]);
     }
+
+    public function admissions(int $patientId): array
+    {
+        $sql = "SELECT a.*, w.name_ar as ward_name, b.bed_number, r.room_number,
+                       CONCAT(e.first_name, ' ', e.last_name) as doctor_name
+                FROM `admissions` a
+                LEFT JOIN `bed_assignments` ba ON a.id = ba.admission_id AND ba.is_active = 1
+                LEFT JOIN `beds` b ON ba.bed_id = b.id
+                LEFT JOIN `rooms` r ON b.room_id = r.id
+                LEFT JOIN `wards` w ON r.ward_id = w.id
+                LEFT JOIN `doctors` doc ON a.admitting_doctor_id = doc.id
+                LEFT JOIN `employees` e ON doc.employee_id = e.id
+                WHERE a.patient_id = :id
+                ORDER BY a.id DESC";
+        return $this->db->fetchAll($sql, ['id' => $patientId]);
+    }
+
+    public function labOrders(int $patientId): array
+    {
+        $sql = "SELECT lo.*, 
+                       CONCAT(e.first_name, ' ', e.last_name) as doctor_name,
+                       (SELECT GROUP_CONCAT(lt.name_ar SEPARATOR '، ') 
+                        FROM `lab_order_items` loi 
+                        JOIN `lab_tests` lt ON loi.lab_test_id = lt.id 
+                        WHERE loi.lab_order_id = lo.id) as test_names
+                FROM `lab_orders` lo
+                LEFT JOIN `doctors` doc ON lo.doctor_id = doc.id
+                LEFT JOIN `employees` e ON doc.employee_id = e.id
+                WHERE lo.patient_id = :id
+                ORDER BY lo.id DESC";
+        return $this->db->fetchAll($sql, ['id' => $patientId]);
+    }
+
+    public function radiologyOrders(int $patientId): array
+    {
+        $sql = "SELECT ro.*, rs.name_ar as service_name, rs.modality,
+                       CONCAT(e.first_name, ' ', e.last_name) as doctor_name
+                FROM `radiology_orders` ro
+                LEFT JOIN `radiology_services` rs ON ro.service_id = rs.id
+                LEFT JOIN `doctors` doc ON ro.doctor_id = doc.id
+                LEFT JOIN `employees` e ON doc.employee_id = e.id
+                WHERE ro.patient_id = :id
+                ORDER BY ro.id DESC";
+        return $this->db->fetchAll($sql, ['id' => $patientId]);
+    }
+
+    public function invoices(int $patientId): array
+    {
+        $sql = "SELECT inv.*
+                FROM `invoices` inv
+                WHERE inv.patient_id = :id
+                ORDER BY inv.id DESC";
+        return $this->db->fetchAll($sql, ['id' => $patientId]);
+    }
+
+    public function surgeries(int $patientId): array
+    {
+        $sql = "SELECT s.*, op.name_ar as operating_room,
+                       CONCAT(e.first_name, ' ', e.last_name) as surgeon_name
+                FROM `surgeries` s
+                LEFT JOIN `operating_rooms` op ON s.operating_room_id = op.id
+                LEFT JOIN `doctors` doc ON s.lead_surgeon_id = doc.id
+                LEFT JOIN `employees` e ON doc.employee_id = e.id
+                WHERE s.patient_id = :id
+                ORDER BY s.id DESC";
+        return $this->db->fetchAll($sql, ['id' => $patientId]);
+    }
 }

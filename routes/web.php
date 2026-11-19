@@ -44,6 +44,7 @@ $router->get('/patients', 'PatientController@index', [AuthMiddleware::class]);
 $router->get('/patients/quick-search', 'PatientController@quickSearch', [AuthMiddleware::class]);
 $router->get('/patients/create', 'PatientController@create', [AuthMiddleware::class]);
 $router->post('/patients', 'PatientController@store', [AuthMiddleware::class, CsrfMiddleware::class]);
+$router->get('/patients/{id}/print-card', 'PatientController@printCard', [AuthMiddleware::class]);
 $router->get('/patients/{id}', 'PatientController@show', [AuthMiddleware::class]);
 $router->post('/patients/{id}/allergies', 'PatientController@addAllergy', [AuthMiddleware::class, CsrfMiddleware::class]);
 $router->post('/patients/{id}/conditions', 'PatientController@addCondition', [AuthMiddleware::class, CsrfMiddleware::class]);
