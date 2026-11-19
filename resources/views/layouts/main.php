@@ -48,11 +48,14 @@ $emergencyPhone = \App\Models\SystemSetting::get('emergency_hotline', '999');
 
         body {
             font-family: var(--hms-font);
+            font-size: 15.5px;
+            line-height: 1.6;
             background-color: var(--hms-light-bg);
-            color: #2D3748;
+            color: #1E293B;
             margin: 0;
             padding: 0;
             overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
         [data-bs-theme="dark"] {
@@ -137,10 +140,10 @@ $emergencyPhone = \App\Models\SystemSetting::get('emergency_hotline', '999');
         }
 
         .sidebar-group-label {
-            font-size: 0.72rem;
+            font-size: 0.78rem;
             text-transform: uppercase;
             font-weight: 700;
-            color: rgba(255, 255, 255, 0.45);
+            color: rgba(255, 255, 255, 0.60);
             padding: 14px 12px 6px;
             letter-spacing: 0.5px;
             white-space: nowrap;
@@ -150,12 +153,12 @@ $emergencyPhone = \App\Models\SystemSetting::get('emergency_hotline', '999');
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 9px 14px;
-            color: rgba(255, 255, 255, 0.82) !important;
+            padding: 10px 14px;
+            color: rgba(255, 255, 255, 0.88) !important;
             text-decoration: none;
             border-radius: 8px;
             font-weight: 600;
-            font-size: 0.88rem;
+            font-size: 0.94rem;
             margin-bottom: 2px;
             white-space: nowrap;
             transition: all 0.15s ease-in-out;

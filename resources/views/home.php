@@ -269,58 +269,55 @@
                     قسم الطوارئ مستقر حالياً، لا توجد حالات حرجة غير مفرزة.
                 </div>
             <?php else: ?>
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead class="table-light">
-                            <tr>
-                                <th>رقم البلاغ</th>
-                                <th>اسم المريض</th>
-                                <th>درجة الفرز</th>
-                                <th>الشكوى الأساسية</th>
-                                <th>الحالة</th>
-                                <th>إجراء</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($activeErCases as $er): 
-                                $triageBadge = match($er['triage_level']) {
-                                    'resuscitation', 'level_1_red', 'red' => 'bg-danger text-white',
-                                    'emergency', 'level_2_orange', 'orange' => 'bg-warning text-dark',
-                                    'urgent', 'level_3_yellow', 'yellow' => 'bg-warning-subtle text-dark border border-warning',
-                                    default => 'bg-success text-white',
-                                };
-                                $triageText = match($er['triage_level']) {
-                                    'resuscitation', 'level_1_red', 'red' => 'إنعاش فوري (أحمر)',
-                                    'emergency', 'level_2_orange', 'orange' => 'حالة حرجة (برتقالي)',
-                                    'urgent', 'level_3_yellow', 'yellow' => 'حالة طارئة (أصفر)',
-                                    'semi_urgent', 'level_4_green', 'green' => 'أقل إلحاحاً (أخضر)',
-                                    default => e($er['triage_level']),
-                                };
-                                $statusText = match($er['status']) {
-                                    'arrived' => 'وصل حديثاً',
-                                    'triaged' => 'تم الفرز',
-                                    'under_treatment' => 'تحت العلاج السريري',
-                                    'discharged' => 'خرج',
-                                    'admitted' => 'حُوّل للتنويم',
-                                    default => e($er['status']),
-                                };
-                            ?>
-                                <tr>
-                                    <td class="fw-bold text-navy font-monospace"><?= e($er['case_number']) ?></td>
-                                    <td class="fw-semibold"><?= e($er['patient_name']) ?></td>
-                                    <td><span class="badge <?= $triageBadge ?> px-2 py-1"><?= $triageText ?></span></td>
-                                    <td class="small text-truncate" style="max-width: 140px;"><?= e($er['chief_complaint'] ?? 'طوارئ') ?></td>
-                                    <td><span class="badge bg-secondary-subtle text-secondary border px-2 py-1"><?= $statusText ?></span></td>
-                                    <td>
-                                        <a href="<?= url('/emergency/' . $er['id']) ?>" class="btn btn-sm btn-outline-primary py-1 px-2 d-inline-flex align-items-center gap-1 shadow-sm">
-                                            <i data-lucide="eye" style="width: 13px; height: 13px;"></i>
-                                            <span>معاينة</span>
-                                        </a>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
+                <div class="d-flex flex-column gap-3">
+                    <?php foreach ($activeErCases as $er): 
+                        $triageBadge = match($er['triage_level']) {
+                            'resuscitation', 'level_1_red', 'red' => 'bg-danger text-white',
+                            'emergency', 'level_2_orange', 'orange' => 'bg-warning text-dark',
+                            'urgent', 'level_3_yellow', 'yellow' => 'bg-warning-subtle text-dark border border-warning',
+                            default => 'bg-success text-white',
+                        };
+                        $triageText = match($er['triage_level']) {
+                            'resuscitation', 'level_1_red', 'red' => 'إنعاش فوري (أحمر)',
+                            'emergency', 'level_2_orange', 'orange' => 'حالة حرجة (برتقالي)',
+                            'urgent', 'level_3_yellow', 'yellow' => 'حالة طارئة (أصفر)',
+                            'semi_urgent', 'level_4_green', 'green' => 'أقل إلحاحاً (أخضر)',
+                            default => e($er['triage_level']),
+                        };
+                        $statusText = match($er['status']) {
+                            'arrived' => 'وصل حديثاً',
+                            'triaged' => 'تم الفرز',
+                            'under_treatment' => 'تحت العلاج السريري',
+                            'discharged' => 'خرج',
+                            'admitted' => 'حُوّل للتنويم',
+                            default => e($er['status']),
+                        };
+                        $isCritical = in_array($er['triage_level'], ['resuscitation', 'level_1_red', 'red']);
+                    ?>
+                        <div class="p-3 border rounded-3 <?= $isCritical ? 'bg-danger bg-opacity-10 border-danger border-opacity-25' : 'bg-light' ?>">
+                            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2">
+                                <div class="d-flex align-items-center gap-2 flex-wrap">
+                                    <strong class="text-navy fs-6"><?= e($er['patient_name']) ?></strong>
+                                    <span class="badge <?= $triageBadge ?> px-2 py-1"><?= $triageText ?></span>
+                                    <span class="badge bg-secondary-subtle text-secondary border px-2 py-1"><?= $statusText ?></span>
+                                </div>
+                                <a href="<?= url('/emergency/' . $er['id']) ?>" class="btn btn-sm btn-outline-danger px-3 py-1 fw-bold d-inline-flex align-items-center gap-1 shadow-sm">
+                                    <span>معاينة الحالة</span>
+                                    <i data-lucide="arrow-left" style="width: 14px; height: 14px;"></i>
+                                </a>
+                            </div>
+                            <div class="d-flex flex-wrap justify-content-between align-items-center small text-muted pt-1 border-top border-light-subtle">
+                                <div>
+                                    <span class="font-monospace fw-bold text-primary"><?= e($er['case_number']) ?></span>
+                                    <span class="mx-2">&bull;</span>
+                                    <span>الشكوى: <strong class="text-dark"><?= e($er['chief_complaint'] ?? 'طوارئ') ?></strong></span>
+                                </div>
+                                <div>
+                                    <span>وقت الوصول: <?= date('H:i', strtotime($er['arrival_time'] ?? 'now')) ?></span>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
             <?php endif; ?>
         </div>
