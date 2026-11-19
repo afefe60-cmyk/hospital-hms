@@ -119,7 +119,7 @@ class App
                 try {
                     echo View::render('errors/500', ['exception' => $e], 'layouts/main');
                 } catch (\Throwable $renderEx) {
-                    echo "<!DOCTYPE html><html lang='ar' dir='rtl'><head><meta charset='utf-8'><title>خطأ في النظام</title><style>body{font-family:sans-serif;text-align:center;padding:50px;background:#f8fafc;color:#1e293b;}h1{color:#dc2626;}</style></head><body><h1>500 - حدث خطأ في النظام</h1><p>يرجى التأكد من إعدادات الاتصال بقاعدة البيانات في ملف .env واستيراد الجداول.</p></body></html>";
+                    echo "<!DOCTYPE html><html lang='ar' dir='rtl'><head><meta charset='utf-8'><title>خطأ في النظام</title><style>body{font-family:sans-serif;text-align:center;padding:50px;background:#f8fafc;color:#1e293b;}h1{color:#dc2626;}</style></head><body><h1>500 - حدث خطأ في النظام</h1><p>يرجى التأكد من إعدادات الاتصال بقاعدة البيانات في ملف .env أو config/database.local.php واستيراد الجداول.</p><div style='direction:ltr;background:#eee;padding:10px;margin:20px auto;max-width:600px;border-radius:6px;font-family:monospace;font-size:13px;'>" . htmlspecialchars($e->getMessage()) . "</div></body></html>";
                 }
             }
         }
