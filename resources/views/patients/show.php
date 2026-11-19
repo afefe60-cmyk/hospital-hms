@@ -410,7 +410,13 @@ $age = date_diff(date_create($patient['date_of_birth']), date_create('today'))->
 
                 <!-- Tab 4: Invoices & Financials -->
                 <div class="tab-pane fade" id="invoicesTab" role="tabpanel">
-                    <h6 class="fw-bold text-navy mb-3">سجل الفواتير والمطالبات المالية:</h6>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="fw-bold text-navy mb-0">سجل الفواتير والمطالبات المالية:</h6>
+                        <a href="<?= url('/billing/create?patient_id=' . $patient['id']) ?>" class="btn btn-sm btn-outline-success fw-bold d-flex align-items-center gap-1.5 shadow-sm">
+                            <i data-lucide="plus-circle" style="width: 14px; height: 14px;"></i>
+                            <span>فاتورة جديدة لهذا المريض</span>
+                        </a>
+                    </div>
                     <?php if (empty($invoices)): ?>
                         <p class="text-muted text-center py-4">لا توجد فواتير سابقة مسجلة لهذا المريض.</p>
                     <?php else: ?>
@@ -425,6 +431,7 @@ $age = date_diff(date_create($patient['date_of_birth']), date_create('today'))->
                                         <th>المسدد (ج.س)</th>
                                         <th>المتبقي (ج.س)</th>
                                         <th>الحالة</th>
+                                        <th class="text-center">إجراءات</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -432,7 +439,11 @@ $age = date_diff(date_create($patient['date_of_birth']), date_create('today'))->
                                         $remaining = (float)$inv['total_patient_due'] - (float)$inv['paid_amount'];
                                     ?>
                                         <tr>
-                                            <td class="fw-bold font-monospace"><?= e($inv['invoice_number']) ?></td>
+                                            <td>
+                                                <a href="<?= url('/billing/' . $inv['id']) ?>" class="fw-bold font-monospace text-navy text-decoration-none hover-underline" title="معاينة تفاصيل الفاتورة">
+                                                    <?= e($inv['invoice_number']) ?>
+                                                </a>
+                                            </td>
                                             <td class="small text-muted"><?= e(date('Y-m-d', strtotime($inv['created_at']))) ?></td>
                                             <td class="fw-bold"><?= number_format($inv['total_gross'], 2) ?></td>
                                             <td><?= number_format($inv['total_insurance'], 2) ?></td>
@@ -442,8 +453,17 @@ $age = date_diff(date_create($patient['date_of_birth']), date_create('today'))->
                                             </td>
                                             <td>
                                                 <span class="badge <?= $inv['status'] === 'paid' ? 'bg-success' : 'bg-warning text-dark' ?>">
-                                                    <?= e($inv['status']) ?>
+                                                    <?= $inv['status'] === 'paid' ? 'مدفوعة' : ($inv['status'] === 'partial' ? 'سداد جزئي' : 'غير مدفوعة') ?>
                                                 </span>
+                                            </td>
+                                            <td class="text-center text-nowrap">
+                                                <a href="<?= url('/billing/' . $inv['id'] . '/print') ?>" target="_blank" class="btn btn-sm btn-outline-primary py-1 px-2.5 d-inline-flex align-items-center gap-1.5 shadow-sm fw-bold" title="طباعة الفاتورة العلاجية">
+                                                    <i data-lucide="printer" style="width: 14px; height: 14px;"></i>
+                                                    <span>طباعة الفاتورة</span>
+                                                </a>
+                                                <a href="<?= url('/billing/' . $inv['id']) ?>" class="btn btn-sm btn-light border py-1 px-2 d-inline-flex align-items-center gap-1 shadow-sm text-navy" title="معاينة تفاصيل الفاتورة">
+                                                    <i data-lucide="eye" style="width: 14px; height: 14px;"></i>
+                                                </a>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
