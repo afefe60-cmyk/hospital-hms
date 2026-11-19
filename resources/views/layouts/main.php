@@ -713,7 +713,7 @@ $emergencyPhone = \App\Models\SystemSetting::get('emergency_hotline', '999');
             <!-- Dedicated Dashboard Content Canvas with Custom Scrollbar -->
             <div id="hms-content-canvas">
                 <!-- Main Body Container -->
-                <main class="pt-2.5 pb-4 flex-grow-1">
+                <main class="py-4 flex-grow-1">
                     <div class="container-fluid px-3 px-xl-4">
                         <!-- Standard Breadcrumbs -->
                         <?php if (isset($breadcrumbs) && is_array($breadcrumbs)): ?>
