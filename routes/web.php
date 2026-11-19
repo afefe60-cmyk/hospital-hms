@@ -232,3 +232,16 @@ $router->get('/hr/payroll/print-sheet', 'HrController@printPayrollSheet', [AuthM
 $router->get('/hr/payroll/{id}', 'HrController@showPayroll', [AuthMiddleware::class]);
 $router->post('/hr/payroll/pay', 'HrController@paySalary', [AuthMiddleware::class, CsrfMiddleware::class]);
 $router->get('/hr/payroll/print/{id}', 'HrController@printPayslip', [AuthMiddleware::class]);
+
+// Reports, Analytics & KPIs (Phase 13)
+$router->get('/reports', 'ReportController@index', [AuthMiddleware::class]);
+$router->get('/reports/financial', 'ReportController@financial', [AuthMiddleware::class]);
+$router->get('/reports/clinical', 'ReportController@clinical', [AuthMiddleware::class]);
+$router->get('/reports/inventory', 'ReportController@inventory', [AuthMiddleware::class]);
+$router->get('/reports/hr', 'ReportController@hr', [AuthMiddleware::class]);
+$router->get('/reports/print', 'ReportController@printReport', [AuthMiddleware::class]);
+$router->get('/reports/export', 'ReportController@exportCsv', [AuthMiddleware::class]);
+
+// System Settings & Hospital Identity (Phase 13)
+$router->get('/settings', 'SettingController@index', [AuthMiddleware::class]);
+$router->post('/settings/update', 'SettingController@update', [AuthMiddleware::class, CsrfMiddleware::class]);

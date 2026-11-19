@@ -345,6 +345,20 @@ $user = current_user();
                                 </a>
                             </li>
                         <?php endif; ?>
+
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-hms <?= active_route('/reports') ?>" href="<?= url('/reports') ?>">
+                                <i data-lucide="bar-chart-2" style="width: 16px; height: 16px; display:inline-block; vertical-align:text-bottom; color: #10B981;"></i>
+                                التقارير والإحصائيات
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-hms <?= active_route('/settings') ?>" href="<?= url('/settings') ?>">
+                                <i data-lucide="settings" style="width: 16px; height: 16px; display:inline-block; vertical-align:text-bottom; color: #60A5FA;"></i>
+                                إعدادات النظام
+                            </a>
+                        </li>
                     <?php endif; ?>
                 </ul>
 
