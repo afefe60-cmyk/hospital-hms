@@ -89,10 +89,10 @@ $emergencyPhone = \App\Models\SystemSetting::get('emergency_hotline', '999');
         }
 
         .sidebar-brand {
-            min-height: var(--hms-topbar-height);
+            min-height: 72px;
             display: flex;
             align-items: center;
-            padding: 10px 16px;
+            padding: 12px 16px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             background-color: rgba(0, 0, 0, 0.15);
             text-decoration: none;
@@ -114,8 +114,8 @@ $emergencyPhone = \App\Models\SystemSetting::get('emergency_hotline', '999');
 
         .sidebar-brand .brand-title {
             font-weight: 700;
-            font-size: 0.92rem;
-            line-height: 1.25;
+            font-size: 0.90rem;
+            line-height: 1.35;
             white-space: normal;
             overflow: visible;
         }
@@ -124,7 +124,7 @@ $emergencyPhone = \App\Models\SystemSetting::get('emergency_hotline', '999');
             flex-grow: 1;
             overflow-y: auto;
             overflow-x: hidden;
-            padding: 12px 10px;
+            padding: 12px 10px 28px;
         }
 
         /* Scrollbar */
@@ -386,8 +386,8 @@ $emergencyPhone = \App\Models\SystemSetting::get('emergency_hotline', '999');
                     <i data-lucide="activity" style="color: #FFFFFF; width: 22px; height: 22px;"></i>
                 </div>
                 <div class="brand-title">
-                    <div class="fw-bold text-white"><?= e($hospitalName) ?></div>
-                    <small class="text-light opacity-75 font-monospace fw-normal d-block" style="font-size: 0.68rem;">Hospital HMS v2.0</small>
+                    <span class="fw-bold text-white d-block lh-sm mb-1"><?= e($hospitalName) ?></span>
+                    <span class="text-light opacity-75 font-monospace fw-normal d-block" style="font-size: 0.68rem; letter-spacing: 0.5px;">Hospital HMS v2.0</span>
                 </div>
             </a>
 
