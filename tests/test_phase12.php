@@ -134,6 +134,19 @@ foreach ($novPayroll as $np) {
         break;
     }
 }
+
+// Ensure test idempotency across multiple runs
+if (!$unpaidSheet && !empty($novPayroll)) {
+    $db->query("UPDATE `payroll` SET `is_paid` = 0, `payment_date` = NULL, `transaction_reference` = NULL WHERE `id` = :id", ['id' => $novPayroll[0]['id']]);
+    $novPayroll = $payrollModel->allDetailed(2026, 11);
+    foreach ($novPayroll as $np) {
+        if (!$np['is_paid']) {
+            $unpaidSheet = $np;
+            break;
+        }
+    }
+}
+
 assertTest("Unpaid payroll sheet exists for payment testing", $unpaidSheet !== null);
 
 if ($unpaidSheet) {

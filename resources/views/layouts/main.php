@@ -40,7 +40,7 @@ $emergencyPhone = \App\Models\SystemSetting::get('emergency_hotline', '999');
             --hms-light-bg: #F4F7FA;
             --hms-gray: #E2E8F0;
             --hms-accent: #D49A36;
-            --hms-sidebar-width: 260px;
+            --hms-sidebar-width: 275px;
             --hms-sidebar-collapsed-width: 74px;
             --hms-topbar-height: 64px;
             --hms-font: <?= $isRtl ? "'Cairo', sans-serif" : "'Inter', -apple-system, sans-serif" ?>;
@@ -89,10 +89,10 @@ $emergencyPhone = \App\Models\SystemSetting::get('emergency_hotline', '999');
         }
 
         .sidebar-brand {
-            height: var(--hms-topbar-height);
+            min-height: var(--hms-topbar-height);
             display: flex;
             align-items: center;
-            padding: 0 16px;
+            padding: 10px 16px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             background-color: rgba(0, 0, 0, 0.15);
             text-decoration: none;
@@ -114,11 +114,10 @@ $emergencyPhone = \App\Models\SystemSetting::get('emergency_hotline', '999');
 
         .sidebar-brand .brand-title {
             font-weight: 700;
-            font-size: 1.05rem;
-            line-height: 1.2;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            font-size: 0.92rem;
+            line-height: 1.25;
+            white-space: normal;
+            overflow: visible;
         }
 
         .sidebar-nav-container {
@@ -387,8 +386,8 @@ $emergencyPhone = \App\Models\SystemSetting::get('emergency_hotline', '999');
                     <i data-lucide="activity" style="color: #FFFFFF; width: 22px; height: 22px;"></i>
                 </div>
                 <div class="brand-title">
-                    <div class="text-truncate" style="max-width: 170px;"><?= e($hospitalName) ?></div>
-                    <small class="text-light opacity-75 font-monospace fw-normal" style="font-size: 0.7rem;">Hospital HMS v2.0</small>
+                    <div class="fw-bold text-white"><?= e($hospitalName) ?></div>
+                    <small class="text-light opacity-75 font-monospace fw-normal d-block" style="font-size: 0.68rem;">Hospital HMS v2.0</small>
                 </div>
             </a>
 
@@ -547,14 +546,25 @@ $emergencyPhone = \App\Models\SystemSetting::get('emergency_hotline', '999');
             <!-- Sidebar User Profile Footer -->
             <?php if (auth()->check()): ?>
                 <div class="sidebar-footer">
-                    <div class="d-flex align-items-center gap-2">
-                        <div class="p-2 rounded-circle bg-white bg-opacity-10 text-white flex-shrink-0">
-                            <i data-lucide="user" style="width: 16px; height: 16px;"></i>
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center gap-2 overflow-hidden">
+                            <div class="position-relative flex-shrink-0">
+                                <div class="p-2 rounded-circle bg-white bg-opacity-10 text-white">
+                                    <i data-lucide="user" style="width: 16px; height: 16px;"></i>
+                                </div>
+                                <span class="position-absolute bottom-0 start-0 p-1 bg-success border border-dark rounded-circle" title="متصل الآن"></span>
+                            </div>
+                            <div class="user-details overflow-hidden">
+                                <strong class="d-block text-white text-truncate" style="font-size: 0.84rem;"><?= e($user['full_name'] ?? 'مستخدم') ?></strong>
+                                <small class="text-light opacity-75 font-monospace" style="font-size: 0.7rem;">@<?= e($user['username']) ?></small>
+                            </div>
                         </div>
-                        <div class="user-details overflow-hidden">
-                            <strong class="d-block text-white text-truncate" style="font-size: 0.85rem;"><?= e($user['full_name'] ?? 'مستخدم') ?></strong>
-                            <small class="text-light opacity-75 font-monospace" style="font-size: 0.72rem;">@<?= e($user['username']) ?></small>
-                        </div>
+                        <form action="<?= url('/logout') ?>" method="POST" class="m-0 user-details">
+                            <?= csrf_field() ?>
+                            <button type="submit" class="btn btn-sm btn-link text-danger p-1" title="تسجيل الخروج">
+                                <i data-lucide="log-out" style="width: 16px; height: 16px;"></i>
+                            </button>
+                        </form>
                     </div>
                 </div>
             <?php endif; ?>

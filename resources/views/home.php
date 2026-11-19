@@ -31,15 +31,17 @@
                     </div>
                 </div>
 
-                <div class="d-flex align-items-center gap-2">
-                    <button class="btn btn-sm btn-light d-flex align-items-center gap-2 shadow-sm fw-bold" data-bs-toggle="modal" data-bs-target="#quickSearchModal">
-                        <i data-lucide="search" style="width: 16px; height: 16px;"></i>
-                        <span>بحث سريع عن مريض</span>
-                        <kbd class="bg-secondary text-white px-1 rounded small">Ctrl+K</kbd>
-                    </button>
-                    <a href="<?= url('/reports') ?>" class="btn btn-sm btn-outline-light d-flex align-items-center gap-1">
+                <div class="d-flex align-items-center gap-2 flex-wrap">
+                    <div class="bg-white bg-opacity-10 px-3 py-2 rounded-3 border border-white border-opacity-25 text-end">
+                        <div class="small text-light opacity-75" style="font-size: 0.75rem;">الوردية التشغيلية الحالية</div>
+                        <strong class="text-white d-flex align-items-center gap-1 justify-content-end" style="font-size: 0.88rem;">
+                            <span class="p-1 rounded-circle bg-success d-inline-block"></span>
+                            الوردية الصباحية المعتمدة
+                        </strong>
+                    </div>
+                    <a href="<?= url('/reports') ?>" class="btn btn-sm btn-light text-navy d-flex align-items-center gap-1 fw-bold shadow-sm px-3 py-2">
                         <i data-lucide="bar-chart-2" style="width: 16px; height: 16px;"></i>
-                        <span>التقارير الشاملة</span>
+                        <span>التقارير الشاملة &larr;</span>
                     </a>
                 </div>
             </div>
@@ -287,15 +289,33 @@
                                     'urgent', 'level_3_yellow', 'yellow' => 'bg-warning-subtle text-dark border border-warning',
                                     default => 'bg-success text-white',
                                 };
+                                $triageText = match($er['triage_level']) {
+                                    'resuscitation', 'level_1_red', 'red' => 'إنعاش فوري (أحمر)',
+                                    'emergency', 'level_2_orange', 'orange' => 'حالة حرجة (برتقالي)',
+                                    'urgent', 'level_3_yellow', 'yellow' => 'حالة طارئة (أصفر)',
+                                    'semi_urgent', 'level_4_green', 'green' => 'أقل إلحاحاً (أخضر)',
+                                    default => e($er['triage_level']),
+                                };
+                                $statusText = match($er['status']) {
+                                    'arrived' => 'وصل حديثاً',
+                                    'triaged' => 'تم الفرز',
+                                    'under_treatment' => 'تحت العلاج السريري',
+                                    'discharged' => 'خرج',
+                                    'admitted' => 'حُوّل للتنويم',
+                                    default => e($er['status']),
+                                };
                             ?>
                                 <tr>
-                                    <td class="fw-bold text-navy"><?= e($er['case_number']) ?></td>
-                                    <td><?= e($er['patient_name']) ?></td>
-                                    <td><span class="badge <?= $triageBadge ?>"><?= e($er['triage_level']) ?></span></td>
-                                    <td class="small text-truncate" style="max-width: 150px;"><?= e($er['chief_complaint'] ?? 'طوارئ') ?></td>
-                                    <td><span class="badge bg-secondary"><?= e($er['status']) ?></span></td>
+                                    <td class="fw-bold text-navy font-monospace"><?= e($er['case_number']) ?></td>
+                                    <td class="fw-semibold"><?= e($er['patient_name']) ?></td>
+                                    <td><span class="badge <?= $triageBadge ?> px-2 py-1"><?= $triageText ?></span></td>
+                                    <td class="small text-truncate" style="max-width: 140px;"><?= e($er['chief_complaint'] ?? 'طوارئ') ?></td>
+                                    <td><span class="badge bg-secondary-subtle text-secondary border px-2 py-1"><?= $statusText ?></span></td>
                                     <td>
-                                        <a href="<?= url('/emergency/' . $er['id']) ?>" class="btn btn-sm btn-outline-primary py-0 px-2">معاينة</a>
+                                        <a href="<?= url('/emergency/' . $er['id']) ?>" class="btn btn-sm btn-outline-primary py-1 px-2 d-inline-flex align-items-center gap-1 shadow-sm">
+                                            <i data-lucide="eye" style="width: 13px; height: 13px;"></i>
+                                            <span>معاينة</span>
+                                        </a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
