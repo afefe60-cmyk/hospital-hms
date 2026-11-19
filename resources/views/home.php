@@ -21,15 +21,15 @@
                         <h4 class="fw-bold mb-0 text-white d-flex align-items-center gap-2">
                             لوحة القيادة والعمليات اليومية
                         </h4>
-                        <div class="text-light opacity-90 small d-flex align-items-center gap-2 flex-wrap mt-1">
-                            <span class="badge bg-white bg-opacity-20 text-white px-2.5 py-1 border border-white border-opacity-25 d-inline-flex align-items-center gap-1.5 fw-semibold">
-                                <span class="p-1 rounded-circle bg-success d-inline-block"></span>
-                                الوردية الصباحية المعتمدة
+                        <div class="d-flex align-items-center gap-2 flex-wrap mt-1">
+                            <span class="badge bg-white px-2.5 py-1.5 shadow-sm d-inline-flex align-items-center gap-1.5 fw-bold" style="background-color: #FFFFFF !important; color: #10293D !important; border-radius: 6px; font-size: 0.84rem;">
+                                <span class="rounded-circle d-inline-block" style="background-color: #10B981 !important; width: 8px; height: 8px; flex-shrink: 0;"></span>
+                                <span>الوردية الصباحية المعتمدة</span>
                             </span>
-                            <span>&bull;</span>
-                            <span class="d-flex align-items-center gap-1">
-                                <i data-lucide="calendar" style="width: 14px; height: 14px;"></i>
-                                <?= date('Y-m-d') ?> | <?= date('l') ?>
+                            <span class="text-white-50">&bull;</span>
+                            <span class="d-flex align-items-center gap-1.5 text-white small fw-medium">
+                                <i data-lucide="calendar" style="width: 14px; height: 14px; color: #A7F3D0;"></i>
+                                <span><?= date('Y-m-d') ?> | <?= date('l') ?></span>
                             </span>
                         </div>
                     </div>
