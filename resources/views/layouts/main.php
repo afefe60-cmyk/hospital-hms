@@ -3,6 +3,10 @@ $locale = \App\Core\Session::get('locale', config('app.locale', 'ar'));
 $isRtl = ($locale === 'ar');
 $dir = $isRtl ? 'rtl' : 'ltr';
 $user = current_user();
+
+$hospitalName = \App\Models\SystemSetting::get('hospital_name_ar', config('app.name', 'مستشفى الأمل التخصصي'));
+$bankakAccount = \App\Models\SystemSetting::get('bankak_account_number', '1820499');
+$emergencyPhone = \App\Models\SystemSetting::get('emergency_hotline', '999');
 ?>
 <!DOCTYPE html>
 <html lang="<?= e($locale) ?>" dir="<?= e($dir) ?>" data-bs-theme="light">
@@ -33,9 +37,12 @@ $user = current_user();
             --hms-navy-dark: #10293D;
             --hms-green: #16856D;
             --hms-green-dark: #126e5a;
-            --hms-light-bg: #F3F6F9;
-            --hms-gray: #DCE5EC;
+            --hms-light-bg: #F4F7FA;
+            --hms-gray: #E2E8F0;
             --hms-accent: #D49A36;
+            --hms-sidebar-width: 260px;
+            --hms-sidebar-collapsed-width: 74px;
+            --hms-topbar-height: 64px;
             --hms-font: <?= $isRtl ? "'Cairo', sans-serif" : "'Inter', -apple-system, sans-serif" ?>;
         }
 
@@ -43,101 +50,248 @@ $user = current_user();
             font-family: var(--hms-font);
             background-color: var(--hms-light-bg);
             color: #2D3748;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
         }
 
         [data-bs-theme="dark"] {
             --hms-light-bg: #0F172A;
+            --hms-navy: #1E293B;
+            --hms-navy-dark: #0F172A;
+            --hms-gray: #334155;
             background-color: var(--hms-light-bg);
             color: #E2E8F0;
         }
 
-        .hms-navbar {
-            background-color: var(--hms-navy);
-            border-bottom: 3px solid var(--hms-green);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+        /* ---------------- App Layout Containers ---------------- */
+        #app-layout {
+            display: flex;
+            min-height: 100vh;
+            width: 100%;
         }
 
-        .hms-brand {
-            font-weight: 700;
-            color: #FFFFFF !important;
+        /* ---------------- Sidebar Styling ---------------- */
+        #hms-sidebar {
+            width: var(--hms-sidebar-width);
+            background-color: var(--hms-navy-dark);
+            color: #F8FAFC;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            <?= $isRtl ? 'right: 0;' : 'left: 0;' ?>
+            z-index: 1040;
+            display: flex;
+            flex-direction: column;
+            box-shadow: <?= $isRtl ? '-3px 0 15px rgba(0,0,0,0.1)' : '3px 0 15px rgba(0,0,0,0.1)' ?>;
+            transition: width 0.24s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+
+        .sidebar-brand {
+            height: var(--hms-topbar-height);
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 1.15rem;
-        }
-
-        .hms-brand .badge-hms {
-            background-color: var(--hms-green);
-            font-size: 0.72rem;
-            padding: 3px 7px;
-            border-radius: 4px;
-            font-weight: 600;
-        }
-
-        .nav-link-hms {
-            color: rgba(255, 255, 255, 0.88) !important;
-            font-weight: 600;
-            font-size: 0.9rem;
-            padding: 8px 12px !important;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.18s ease;
-        }
-        .nav-link-hms:hover, 
-        .nav-link-hms.active,
-        .nav-link-hms:focus {
+            padding: 0 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: rgba(0, 0, 0, 0.15);
+            text-decoration: none;
             color: #FFFFFF !important;
-            background-color: rgba(255, 255, 255, 0.14);
+            gap: 12px;
+            flex-shrink: 0;
         }
 
-        .dropdown-menu-hms {
-            border: 1px solid var(--hms-gray);
+        .sidebar-brand .brand-icon-box {
+            width: 40px;
+            height: 40px;
             border-radius: 10px;
-            box-shadow: 0 10px 25px rgba(23, 59, 89, 0.15);
-            padding: 8px 0;
-            min-width: 230px;
-        }
-
-        .dropdown-item-hms {
-            padding: 9px 16px;
-            font-weight: 500;
-            font-size: 0.88rem;
+            background: linear-gradient(135deg, var(--hms-green) 0%, #10b981 100%);
             display: flex;
             align-items: center;
-            gap: 10px;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .sidebar-brand .brand-title {
+            font-weight: 700;
+            font-size: 1.05rem;
+            line-height: 1.2;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .sidebar-nav-container {
+            flex-grow: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 12px 10px;
+        }
+
+        /* Scrollbar */
+        .sidebar-nav-container::-webkit-scrollbar {
+            width: 5px;
+        }
+        .sidebar-nav-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 4px;
+        }
+
+        .sidebar-group-label {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.45);
+            padding: 14px 12px 6px;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        .nav-item-hms {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 9px 14px;
+            color: rgba(255, 255, 255, 0.82) !important;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.88rem;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            transition: all 0.15s ease-in-out;
+            position: relative;
+        }
+
+        .nav-item-hms:hover {
+            color: #FFFFFF !important;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-item-hms.active {
+            color: #FFFFFF !important;
+            background: linear-gradient(90deg, rgba(22, 133, 109, 0.9) 0%, rgba(22, 133, 109, 0.6) 100%);
+            box-shadow: 0 2px 6px rgba(22, 133, 109, 0.3);
+        }
+
+        .nav-item-hms i {
+            flex-shrink: 0;
+            width: 18px;
+            height: 18px;
+        }
+
+        .sidebar-footer {
+            padding: 12px 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: rgba(0, 0, 0, 0.15);
+            flex-shrink: 0;
+        }
+
+        /* ---------------- Collapsed State (Mini-Sidebar) ---------------- */
+        body.sidebar-collapsed #hms-sidebar {
+            width: var(--hms-sidebar-collapsed-width);
+        }
+
+        body.sidebar-collapsed .sidebar-brand .brand-title,
+        body.sidebar-collapsed .sidebar-brand .badge-hms,
+        body.sidebar-collapsed .sidebar-group-label,
+        body.sidebar-collapsed .nav-item-hms span,
+        body.sidebar-collapsed .nav-item-hms .badge,
+        body.sidebar-collapsed .sidebar-footer .user-details {
+            display: none !important;
+        }
+
+        body.sidebar-collapsed .nav-item-hms {
+            justify-content: center;
+            padding: 12px 0;
+        }
+
+        /* ---------------- Main Content Canvas ---------------- */
+        #hms-main-wrapper {
+            flex-grow: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            <?= $isRtl ? 'margin-right: var(--hms-sidebar-width);' : 'margin-left: var(--hms-sidebar-width);' ?>
+            transition: <?= $isRtl ? 'margin-right' : 'margin-left' ?> 0.24s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.sidebar-collapsed #hms-main-wrapper {
+            <?= $isRtl ? 'margin-right: var(--hms-sidebar-collapsed-width);' : 'margin-left: var(--hms-sidebar-collapsed-width);' ?>
+        }
+
+        /* ---------------- Sleek Topbar ---------------- */
+        #hms-topbar {
+            height: var(--hms-topbar-height);
+            background-color: #FFFFFF;
+            border-bottom: 1px solid var(--hms-gray);
+            position: sticky;
+            top: 0;
+            z-index: 1030;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+        }
+
+        [data-bs-theme="dark"] #hms-topbar {
+            background-color: #1E293B;
+            border-bottom-color: #334155;
+        }
+
+        .topbar-toggle-btn {
+            background: transparent;
+            border: 1px solid var(--hms-gray);
             color: #334155;
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
             transition: all 0.15s ease;
         }
-        .dropdown-item-hms:hover {
+        .topbar-toggle-btn:hover {
             background-color: #F1F5F9;
-            color: var(--hms-navy);
-            padding-inline-start: 20px;
+            color: var(--hms-green);
         }
-        .dropdown-item-hms.active {
-            background-color: var(--hms-green);
-            color: #FFFFFF !important;
-        }
-        .dropdown-item-hms.active i {
-            color: #FFFFFF !important;
-        }
-
-        [data-bs-theme="dark"] .dropdown-menu-hms {
-            background-color: #1E293B;
+        [data-bs-theme="dark"] .topbar-toggle-btn {
             border-color: #334155;
-        }
-        [data-bs-theme="dark"] .dropdown-item-hms {
             color: #CBD5E1;
         }
-        [data-bs-theme="dark"] .dropdown-item-hms:hover {
+        [data-bs-theme="dark"] .topbar-toggle-btn:hover {
             background-color: #334155;
             color: #FFFFFF;
         }
 
+        .topbar-search-btn {
+            background-color: var(--hms-light-bg);
+            border: 1px solid var(--hms-gray);
+            color: #64748B;
+            border-radius: 8px;
+            padding: 7px 14px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .topbar-search-btn:hover {
+            border-color: var(--hms-green);
+            color: var(--hms-navy);
+            background-color: #FFFFFF;
+        }
+        [data-bs-theme="dark"] .topbar-search-btn {
+            background-color: #0F172A;
+            border-color: #334155;
+            color: #94A3B8;
+        }
+
+        /* ---------------- Standard Component Styles ---------------- */
         .card-hms {
             border: 1px solid var(--hms-gray);
             border-radius: 12px;
@@ -180,386 +334,302 @@ $user = current_user();
             color: #FFFFFF;
         }
 
-        .search-trigger-btn {
-            background: rgba(255, 255, 255, 0.12);
-            color: #FFFFFF;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            padding: 6px 14px;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s ease;
-        }
-        .search-trigger-btn:hover {
-            background: rgba(255, 255, 255, 0.22);
-            color: #FFFFFF;
-        }
-
-        .breadcrumb-hms {
-            background: transparent;
-            padding: 0;
-            margin-bottom: 1.25rem;
-            font-size: 0.88rem;
-        }
-        .breadcrumb-hms a {
-            text-decoration: none;
-            color: var(--hms-green);
-        }
-
         footer {
             margin-top: auto;
             background-color: #FFFFFF;
             border-top: 1px solid var(--hms-gray);
-            padding: 15px 0;
-            font-size: 0.875rem;
+            padding: 14px 20px;
+            font-size: 0.85rem;
         }
-
         [data-bs-theme="dark"] footer {
             background-color: #1E293B;
             border-color: #334155;
+        }
+
+        /* ---------------- Responsive Drawer for Mobile ---------------- */
+        @media (max-width: 991.98px) {
+            #hms-sidebar {
+                <?= $isRtl ? 'right: calc(-1 * var(--hms-sidebar-width));' : 'left: calc(-1 * var(--hms-sidebar-width));' ?>
+            }
+            body.mobile-sidebar-open #hms-sidebar {
+                <?= $isRtl ? 'right: 0;' : 'left: 0;' ?>
+            }
+            #hms-main-wrapper {
+                <?= $isRtl ? 'margin-right: 0 !important;' : 'margin-left: 0 !important;' ?>
+            }
+            #sidebar-backdrop {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 1035;
+            }
+            body.mobile-sidebar-open #sidebar-backdrop {
+                display: block;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- Main Navigation Bar -->
-    <nav class="navbar navbar-expand-xl hms-navbar py-2 sticky-top">
-        <div class="container-fluid px-3 px-xl-4">
-            <!-- Brand -->
-            <a class="navbar-brand hms-brand" href="<?= url('/') ?>">
-                <i data-lucide="activity" style="color: #6EE7B7; width: 28px; height: 28px;"></i>
-                <span class="d-none d-sm-inline"><?= e(config('app.name')) ?></span>
-                <span class="badge-hms">Core v1.0</span>
+    <div id="app-layout">
+        <!-- Backdrop for mobile drawer -->
+        <div id="sidebar-backdrop"></div>
+
+        <!-- ---------------- Modern Sidebar Navigation ---------------- -->
+        <aside id="hms-sidebar">
+            <!-- Sidebar Header / Brand -->
+            <a href="<?= url('/') ?>" class="sidebar-brand">
+                <div class="brand-icon-box shadow-sm">
+                    <i data-lucide="activity" style="color: #FFFFFF; width: 22px; height: 22px;"></i>
+                </div>
+                <div class="brand-title">
+                    <div class="text-truncate" style="max-width: 170px;"><?= e($hospitalName) ?></div>
+                    <small class="text-light opacity-75 font-monospace fw-normal" style="font-size: 0.7rem;">Hospital HMS v2.0</small>
+                </div>
             </a>
 
-            <!-- Mobile Navbar Toggler -->
-            <button class="navbar-toggler text-white border-0" type="button" data-bs-toggle="collapse" data-bs-target="#hmsNavbar">
-                <i data-lucide="menu"></i>
-            </button>
+            <!-- Scrollable Navigation Items -->
+            <div class="sidebar-nav-container">
+                <!-- Group 1: اللوحة المركزية -->
+                <div class="sidebar-group-label">القيادة والعمليات</div>
+                <a href="<?= url('/') ?>" class="nav-item-hms <?= active_route('/') ?>" title="الرئيسية">
+                    <i data-lucide="layout-dashboard" style="color: #6EE7B7;"></i>
+                    <span>لوحة القيادة اليومية</span>
+                </a>
 
-            <!-- Nav Links Collapse -->
-            <div class="collapse navbar-collapse" id="hmsNavbar">
-                <ul class="navbar-nav me-auto mb-2 mb-xl-0 gap-1">
-                    <!-- 1. الرئيسية -->
-                    <li class="nav-item">
-                        <a class="nav-link nav-link-hms <?= active_route('/') ?>" href="<?= url('/') ?>">
-                            <i data-lucide="layout-dashboard" style="width: 17px; height: 17px;"></i>
-                            <span>الرئيسية</span>
+                <?php if (auth()->check()): ?>
+                    <!-- Group 2: الاستقبال والمرضى -->
+                    <div class="sidebar-group-label">الاستقبال وسجلات المرضى</div>
+                    <a href="<?= url('/reception') ?>" class="nav-item-hms <?= active_route('/reception') ?>" title="الاستقبال والمكتب الأمامي">
+                        <i data-lucide="bell" style="color: #93C5FD;"></i>
+                        <span>الاستقبال والمكتب الأمامي</span>
+                    </a>
+                    <a href="<?= url('/patients') ?>" class="nav-item-hms <?= active_route('/patients') ?>" title="سجل المرضى الموحد">
+                        <i data-lucide="folder-heart" style="color: #60A5FA;"></i>
+                        <span>سجل المرضى الموحد (MRN)</span>
+                    </a>
+                    <a href="<?= url('/appointments') ?>" class="nav-item-hms <?= active_route('/appointments') ?>" title="المواعيد والحجوزات">
+                        <i data-lucide="calendar" style="color: #FCD34D;"></i>
+                        <span>المواعيد والجدولة</span>
+                    </a>
+                    <a href="<?= url('/patients/create') ?>" class="nav-item-hms" title="فتح ملف مريض جديد">
+                        <i data-lucide="user-plus" style="color: #34D399;"></i>
+                        <span>فتح ملف جديد (+)</span>
+                    </a>
+
+                    <!-- Group 3: الخدمات السريرية والتنويم -->
+                    <div class="sidebar-group-label">الخدمات السريرية والتنويم</div>
+                    <a href="<?= url('/emr') ?>" class="nav-item-hms <?= active_route('/emr') ?>" title="عيادة الطبيب السريرية">
+                        <i data-lucide="file-heart" style="color: #34D399;"></i>
+                        <span>عيادة الطبيب EMR</span>
+                    </a>
+                    <a href="<?= url('/emergency') ?>" class="nav-item-hms <?= active_route('/emergency') ?>" title="الحوادث والطوارئ">
+                        <i data-lucide="ambulance" style="color: #F87171;"></i>
+                        <span>الحوادث والطوارئ ER</span>
+                    </a>
+                    <a href="<?= url('/admissions') ?>" class="nav-item-hms <?= active_route('/admissions') ?>" title="التنويم والأجنحة">
+                        <i data-lucide="bed-double" style="color: #38BDF8;"></i>
+                        <span>التنويم والأجنحة IPD</span>
+                    </a>
+                    <a href="<?= url('/nursing') ?>" class="nav-item-hms <?= active_route('/nursing') ?>" title="محطة التمريض MAR">
+                        <i data-lucide="clipboard-check" style="color: #A78BFA;"></i>
+                        <span>محطة التمريض والجرعات</span>
+                    </a>
+                    <a href="<?= url('/surgery') ?>" class="nav-item-hms <?= active_route('/surgery') ?>" title="العمليات الجراحية">
+                        <i data-lucide="scissors" style="color: #CBD5E1;"></i>
+                        <span>العمليات الجراحية OR</span>
+                    </a>
+                    <a href="<?= url('/icu') ?>" class="nav-item-hms <?= active_route('/icu') ?>" title="العناية المركزة">
+                        <i data-lucide="heart-pulse" style="color: #EF4444;"></i>
+                        <span>العناية المركزة ICU</span>
+                    </a>
+
+                    <!-- Group 4: التشخيص والإمداد الدوائي -->
+                    <div class="sidebar-group-label">التشخيص والصيدلية والمخازن</div>
+                    <a href="<?= url('/lab') ?>" class="nav-item-hms <?= active_route('/lab') ?>" title="المختبرات الطبية LIS">
+                        <i data-lucide="flask-conical" style="color: #FBBF24;"></i>
+                        <span>المختبرات الطبية LIS</span>
+                    </a>
+                    <a href="<?= url('/radiology') ?>" class="nav-item-hms <?= active_route('/radiology') ?>" title="الأشعة والتصوير الطبي RIS">
+                        <i data-lucide="scan" style="color: #60A5FA;"></i>
+                        <span>الأشعة والتصوير RIS</span>
+                    </a>
+                    <a href="<?= url('/pharmacy') ?>" class="nav-item-hms <?= active_route('/pharmacy') ?>" title="صيدلية المستشفى">
+                        <i data-lucide="pill" style="color: #10B981;"></i>
+                        <span>صيدلية المستشفى وصرف العلاج</span>
+                    </a>
+                    <a href="<?= url('/inventory') ?>" class="nav-item-hms <?= active_route('/inventory') ?>" title="المستودعات الطبية FEFO">
+                        <i data-lucide="boxes" style="color: #94A3B8;"></i>
+                        <span>المستودعات الطبية FEFO</span>
+                    </a>
+
+                    <!-- Group 5: المالية والتأمين -->
+                    <div class="sidebar-group-label">المالية والتأمين الصحي</div>
+                    <a href="<?= url('/billing') ?>" class="nav-item-hms <?= active_route('/billing') ?>" title="الفواتير وسندات القبض">
+                        <i data-lucide="receipt" style="color: #34D399;"></i>
+                        <span>الفواتير والتحصيل</span>
+                    </a>
+                    <a href="<?= url('/cashboxes') ?>" class="nav-item-hms <?= active_route('/cashboxes') ?>" title="ورديات الصناديق">
+                        <i data-lucide="wallet" style="color: #FBBF24;"></i>
+                        <span>ورديات الصناديق والخزينة</span>
+                    </a>
+                    <a href="<?= url('/insurance') ?>" class="nav-item-hms <?= active_route('/insurance') ?>" title="التأمين الطبي">
+                        <i data-lucide="shield-check" style="color: #60A5FA;"></i>
+                        <span>التأمين الصحي والمطالبات</span>
+                    </a>
+
+                    <!-- Group 6: الموارد البشرية والرواتب -->
+                    <div class="sidebar-group-label">الموارد البشرية والكوادر</div>
+                    <a href="<?= url('/hr') ?>" class="nav-item-hms <?= active_route('/hr') ?>" title="لوحة الموارد البشرية">
+                        <i data-lucide="briefcase" style="color: #F59E0B;"></i>
+                        <span>لوحة الموارد البشرية</span>
+                    </a>
+                    <a href="<?= url('/employees') ?>" class="nav-item-hms <?= active_route('/employees') ?>" title="دليل الموظفين">
+                        <i data-lucide="users" style="color: #38BDF8;"></i>
+                        <span>سجل الكوادر والموظفين</span>
+                    </a>
+                    <a href="<?= url('/hr?tab=payroll') ?>" class="nav-item-hms" title="مسيرات الرواتب SDG">
+                        <i data-lucide="coins" style="color: #10B981;"></i>
+                        <span>مسيرات الرواتب (SDG)</span>
+                    </a>
+
+                    <!-- Group 7: التقارير والإدارة -->
+                    <div class="sidebar-group-label">الإدارة والتقارير والنظام</div>
+                    <a href="<?= url('/reports') ?>" class="nav-item-hms <?= active_route('/reports') ?>" title="التقارير والمؤشرات">
+                        <i data-lucide="bar-chart-2" style="color: #10B981;"></i>
+                        <span>التقارير والإحصائيات</span>
+                    </a>
+                    <a href="<?= url('/beds') ?>" class="nav-item-hms <?= active_route('/beds') ?>" title="خريطة الأسرة">
+                        <i data-lucide="bed" style="color: #38BDF8;"></i>
+                        <span>خريطة الأسرة والأجنحة</span>
+                    </a>
+                    <a href="<?= url('/departments') ?>" class="nav-item-hms <?= active_route('/departments') ?>" title="الأقسام والعيادات">
+                        <i data-lucide="building" style="color: #94A3B8;"></i>
+                        <span>الأقسام والعيادات</span>
+                    </a>
+                    <a href="<?= url('/doctors') ?>" class="nav-item-hms <?= active_route('/doctors') ?>" title="الأطباء">
+                        <i data-lucide="user-check" style="color: #60A5FA;"></i>
+                        <span>دليل الأطباء</span>
+                    </a>
+
+                    <?php if (can('users.view')): ?>
+                        <a href="<?= url('/users') ?>" class="nav-item-hms <?= active_route('/users') ?>" title="المستخدمين">
+                            <i data-lucide="user-cog" style="color: #94A3B8;"></i>
+                            <span>المستخدمين والحسابات</span>
                         </a>
-                    </li>
-
-                    <?php if (auth()->check()): ?>
-                        <!-- 2. الاستقبال والمرضى (Patient Services) -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link nav-link-hms dropdown-toggle <?= active_group(['/reception', '/patients', '/appointments']) ?>" href="#" role="button" data-bs-toggle="dropdown">
-                                <i data-lucide="users" style="width: 17px; height: 17px; color: #93C5FD;"></i>
-                                <span>الاستقبال وسجلات المرضى</span>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-hms shadow">
-                                <li>
-                                    <a class="dropdown-item dropdown-item-hms <?= active_route('/reception') ?>" href="<?= url('/reception') ?>">
-                                        <i data-lucide="bell" style="width: 16px; height: 16px; color: #16856D;"></i>
-                                        <span>الاستقبال والمكتب الأمامي</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item dropdown-item-hms <?= active_route('/patients') ?>" href="<?= url('/patients') ?>">
-                                        <i data-lucide="folder-heart" style="width: 16px; height: 16px; color: #2563EB;"></i>
-                                        <span>سجل المرضى الموحد</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item dropdown-item-hms <?= active_route('/appointments') ?>" href="<?= url('/appointments') ?>">
-                                        <i data-lucide="calendar" style="width: 16px; height: 16px; color: #D97706;"></i>
-                                        <span>حجز وإدارة المواعيد</span>
-                                    </a>
-                                </li>
-                                <li><hr class="dropdown-divider my-1"></li>
-                                <li>
-                                    <a class="dropdown-item dropdown-item-hms text-success fw-bold" href="<?= url('/patients/create') ?>">
-                                        <i data-lucide="user-plus" style="width: 16px; height: 16px;"></i>
-                                        <span>+ فتح ملف مريض جديد (MRN)</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-
-                        <!-- 3. العيادات والتنويم (Clinical & IPD) -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link nav-link-hms dropdown-toggle <?= active_group(['/emr', '/emergency', '/admissions', '/nursing', '/surgery', '/icu']) ?>" href="#" role="button" data-bs-toggle="dropdown">
-                                <i data-lucide="stethoscope" style="width: 17px; height: 17px; color: #6EE7B7;"></i>
-                                <span>الخدمات السريرية والتنويم</span>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-hms shadow">
-                                <li>
-                                    <a class="dropdown-item dropdown-item-hms <?= active_route('/emr') ?>" href="<?= url('/emr') ?>">
-                                        <i data-lucide="file-heart" style="width: 16px; height: 16px; color: #16856D;"></i>
-                                        <span>عيادة الطبيب السريرية EMR</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item dropdown-item-hms <?= active_route('/emergency') ?>" href="<?= url('/emergency') ?>">
-                                        <i data-lucide="ambulance" style="width: 16px; height: 16px; color: #EF4444;"></i>
-                                        <span>طوارئ وحوادث وفرز ER</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item dropdown-item-hms <?= active_route('/admissions') ?>" href="<?= url('/admissions') ?>">
-                                        <i data-lucide="bed-double" style="width: 16px; height: 16px; color: #0284C7;"></i>
-                                        <span>التنويم الداخلي والأجنحة IPD</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item dropdown-item-hms <?= active_route('/nursing') ?>" href="<?= url('/nursing') ?>">
-                                        <i data-lucide="clipboard-check" style="width: 16px; height: 16px; color: #8B5CF6;"></i>
-                                        <span>محطة التمريض والجرعات MAR</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item dropdown-item-hms <?= active_route('/surgery') ?>" href="<?= url('/surgery') ?>">
-                                        <i data-lucide="scissors" style="width: 16px; height: 16px; color: #475569;"></i>
-                                        <span>العمليات الجراحية والتخدير OR</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item dropdown-item-hms <?= active_route('/icu') ?>" href="<?= url('/icu') ?>">
-                                        <i data-lucide="heart-pulse" style="width: 16px; height: 16px; color: #DC2626;"></i>
-                                        <span>العناية المركزة والحرجة ICU</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-
-                        <!-- 4. التشخيص والصيدلية (Diagnostics & Pharmacy) -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link nav-link-hms dropdown-toggle <?= active_group(['/lab', '/radiology', '/pharmacy', '/inventory']) ?>" href="#" role="button" data-bs-toggle="dropdown">
-                                <i data-lucide="test-tube-2" style="width: 17px; height: 17px; color: #FBBF24;"></i>
-                                <span>التشخيص والصيدلية</span>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-hms shadow">
-                                <li>
-                                    <a class="dropdown-item dropdown-item-hms <?= active_route('/lab') ?>" href="<?= url('/lab') ?>">
-                                        <i data-lucide="flask-conical" style="width: 16px; height: 16px; color: #D97706;"></i>
-                                        <span>المختبرات والتحاليل LIS</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item dropdown-item-hms <?= active_route('/radiology') ?>" href="<?= url('/radiology') ?>">
-                                        <i data-lucide="scan" style="width: 16px; height: 16px; color: #2563EB;"></i>
-                                        <span>الأشعة والتصوير الطبي RIS</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item dropdown-item-hms <?= active_route('/pharmacy') ?>" href="<?= url('/pharmacy') ?>">
-                                        <i data-lucide="pill" style="width: 16px; height: 16px; color: #16856D;"></i>
-                                        <span>صيدلية المستشفى وصرف العلاج</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item dropdown-item-hms <?= active_route('/inventory') ?>" href="<?= url('/inventory') ?>">
-                                        <i data-lucide="boxes" style="width: 16px; height: 16px; color: #475569;"></i>
-                                        <span>المستودعات الدوائية FEFO</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-
-                        <!-- 5. المالية والتأمين (Finance & Insurance) -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link nav-link-hms dropdown-toggle <?= active_group(['/billing', '/cashboxes', '/insurance']) ?>" href="#" role="button" data-bs-toggle="dropdown">
-                                <i data-lucide="wallet" style="width: 17px; height: 17px; color: #34D399;"></i>
-                                <span>المالية والتأمين</span>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-hms shadow">
-                                <li>
-                                    <a class="dropdown-item dropdown-item-hms <?= active_route('/billing') ?>" href="<?= url('/billing') ?>">
-                                        <i data-lucide="receipt" style="width: 16px; height: 16px; color: #16856D;"></i>
-                                        <span>الفواتير والتحصيل وسندات القبض</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item dropdown-item-hms <?= active_route('/cashboxes') ?>" href="<?= url('/cashboxes') ?>">
-                                        <i data-lucide="landmark" style="width: 16px; height: 16px; color: #D97706;"></i>
-                                        <span>ورديات الخزينة والصناديق</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item dropdown-item-hms <?= active_route('/insurance') ?>" href="<?= url('/insurance') ?>">
-                                        <i data-lucide="shield-check" style="width: 16px; height: 16px; color: #2563EB;"></i>
-                                        <span>التأمين الصحي والمطالبات</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-
-                        <!-- 6. الموارد البشرية والرواتب (HR & Workforce) -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link nav-link-hms dropdown-toggle <?= active_group(['/hr', '/employees']) ?>" href="#" role="button" data-bs-toggle="dropdown">
-                                <i data-lucide="briefcase" style="width: 17px; height: 17px; color: #F59E0B;"></i>
-                                <span>الموارد البشرية</span>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-hms shadow">
-                                <li>
-                                    <a class="dropdown-item dropdown-item-hms <?= active_route('/hr') ?>" href="<?= url('/hr') ?>">
-                                        <i data-lucide="layout-grid" style="width: 16px; height: 16px; color: #F59E0B;"></i>
-                                        <span>لوحة تحكم الموارد البشرية</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item dropdown-item-hms <?= active_route('/employees') ?>" href="<?= url('/employees') ?>">
-                                        <i data-lucide="users" style="width: 16px; height: 16px; color: #2563EB;"></i>
-                                        <span>سجل الكوادر والموظفين</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item dropdown-item-hms" href="<?= url('/hr?tab=rosters') ?>">
-                                        <i data-lucide="calendar-check" style="width: 16px; height: 16px; color: #16856D;"></i>
-                                        <span>جداول المناوبات والورديات</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item dropdown-item-hms" href="<?= url('/hr?tab=leaves') ?>">
-                                        <i data-lucide="calendar-off" style="width: 16px; height: 16px; color: #EF4444;"></i>
-                                        <span>إدارة طلبات الإجازات</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item dropdown-item-hms" href="<?= url('/hr?tab=payroll') ?>">
-                                        <i data-lucide="coins" style="width: 16px; height: 16px; color: #10B981;"></i>
-                                        <span>مسيرات الرواتب الشهرية (SDG)</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-
-                        <!-- 7. الإدارة والتقارير (Admin & Settings) -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link nav-link-hms dropdown-toggle <?= active_group(['/reports', '/departments', '/clinics', '/doctors', '/beds', '/users', '/roles', '/audit-logs', '/settings']) ?>" href="#" role="button" data-bs-toggle="dropdown">
-                                <i data-lucide="settings" style="width: 17px; height: 17px; color: #94A3B8;"></i>
-                                <span>الإدارة والتقارير</span>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-hms shadow">
-                                <li>
-                                    <a class="dropdown-item dropdown-item-hms <?= active_route('/reports') ?>" href="<?= url('/reports') ?>">
-                                        <i data-lucide="bar-chart-2" style="width: 16px; height: 16px; color: #10B981;"></i>
-                                        <span>لوحة التقارير والمؤشرات</span>
-                                    </a>
-                                </li>
-                                <li><hr class="dropdown-divider my-1"></li>
-                                <li class="dropdown-header small text-muted">الهيكل الطبي والتنظيمي</li>
-                                <li>
-                                    <a class="dropdown-item dropdown-item-hms <?= active_route('/beds') ?>" href="<?= url('/beds') ?>">
-                                        <i data-lucide="bed" style="width: 16px; height: 16px; color: #0284C7;"></i>
-                                        <span>خريطة الأجنحة والأسرة</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item dropdown-item-hms <?= active_route('/departments') ?>" href="<?= url('/departments') ?>">
-                                        <i data-lucide="building" style="width: 16px; height: 16px; color: #475569;"></i>
-                                        <span>الأقسام الطبية والإدارية</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item dropdown-item-hms <?= active_route('/clinics') ?>" href="<?= url('/clinics') ?>">
-                                        <i data-lucide="door-open" style="width: 16px; height: 16px; color: #16856D;"></i>
-                                        <span>العيادات التخصصية</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item dropdown-item-hms <?= active_route('/doctors') ?>" href="<?= url('/doctors') ?>">
-                                        <i data-lucide="user-check" style="width: 16px; height: 16px; color: #2563EB;"></i>
-                                        <span>دليل الأطباء والاستشاريين</span>
-                                    </a>
-                                </li>
-                                <li><hr class="dropdown-divider my-1"></li>
-                                <li class="dropdown-header small text-muted">إدارة النظام والأمان</li>
-                                <?php if (can('users.view')): ?>
-                                    <li>
-                                        <a class="dropdown-item dropdown-item-hms <?= active_route('/users') ?>" href="<?= url('/users') ?>">
-                                            <i data-lucide="user-cog" style="width: 16px; height: 16px; color: #475569;"></i>
-                                            <span>المستخدمين والحسابات</span>
-                                        </a>
-                                    </li>
-                                <?php endif; ?>
-                                <?php if (can('roles.manage')): ?>
-                                    <li>
-                                        <a class="dropdown-item dropdown-item-hms <?= active_route('/roles') ?>" href="<?= url('/roles') ?>">
-                                            <i data-lucide="shield-check" style="width: 16px; height: 16px; color: #DC2626;"></i>
-                                            <span>الأدوار والصلاحيات RBAC</span>
-                                        </a>
-                                    </li>
-                                <?php endif; ?>
-                                <?php if (can('audit.view')): ?>
-                                    <li>
-                                        <a class="dropdown-item dropdown-item-hms <?= active_route('/audit-logs') ?>" href="<?= url('/audit-logs') ?>">
-                                            <i data-lucide="clipboard-list" style="width: 16px; height: 16px; color: #D97706;"></i>
-                                            <span>سجل التدقيق الأمني Audit</span>
-                                        </a>
-                                    </li>
-                                <?php endif; ?>
-                                <li>
-                                    <a class="dropdown-item dropdown-item-hms <?= active_route('/settings') ?>" href="<?= url('/settings') ?>">
-                                        <i data-lucide="sliders" style="width: 16px; height: 16px; color: #60A5FA;"></i>
-                                        <span>إعدادات وهوية المنشأة</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
                     <?php endif; ?>
-                </ul>
 
-                <!-- Navbar Right Tools -->
-                <div class="d-flex align-items-center gap-2 mt-2 mt-xl-0">
+                    <?php if (can('roles.manage')): ?>
+                        <a href="<?= url('/roles') ?>" class="nav-item-hms <?= active_route('/roles') ?>" title="الأدوار والصلاحيات">
+                            <i data-lucide="shield-alert" style="color: #F87171;"></i>
+                            <span>الأدوار والصلاحيات RBAC</span>
+                        </a>
+                    <?php endif; ?>
+
+                    <?php if (can('audit.view')): ?>
+                        <a href="<?= url('/audit-logs') ?>" class="nav-item-hms <?= active_route('/audit-logs') ?>" title="سجل التدقيق">
+                            <i data-lucide="clipboard-list" style="color: #FBBF24;"></i>
+                            <span>سجل التدقيق الأمني</span>
+                        </a>
+                    <?php endif; ?>
+
+                    <a href="<?= url('/settings') ?>" class="nav-item-hms <?= active_route('/settings') ?>" title="إعدادات النظام">
+                        <i data-lucide="settings" style="color: #38BDF8;"></i>
+                        <span>إعدادات وهوية المستشفى</span>
+                    </a>
+                <?php endif; ?>
+            </div>
+
+            <!-- Sidebar User Profile Footer -->
+            <?php if (auth()->check()): ?>
+                <div class="sidebar-footer">
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="p-2 rounded-circle bg-white bg-opacity-10 text-white flex-shrink-0">
+                            <i data-lucide="user" style="width: 16px; height: 16px;"></i>
+                        </div>
+                        <div class="user-details overflow-hidden">
+                            <strong class="d-block text-white text-truncate" style="font-size: 0.85rem;"><?= e($user['full_name'] ?? 'مستخدم') ?></strong>
+                            <small class="text-light opacity-75 font-monospace" style="font-size: 0.72rem;">@<?= e($user['username']) ?></small>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
+        </aside>
+
+        <!-- ---------------- Main Canvas & Sleek Topbar ---------------- -->
+        <div id="hms-main-wrapper">
+            <!-- Topbar Header -->
+            <header id="hms-topbar">
+                <div class="d-flex align-items-center gap-3">
+                    <!-- Toggle Sidebar Button -->
+                    <button class="topbar-toggle-btn" id="sidebarToggleBtn" title="طي / توسيع القائمة الجانبية">
+                        <i data-lucide="menu" style="width: 20px; height: 20px;"></i>
+                    </button>
+
                     <?php if (auth()->check()): ?>
-                        <!-- Quick Search Trigger -->
-                        <button class="search-trigger-btn" type="button" data-bs-toggle="modal" data-bs-target="#quickSearchModal" title="بحث سريع عن مريض (Ctrl+K)">
-                            <i data-lucide="search" style="width: 16px; height: 16px;"></i>
-                            <span class="d-none d-md-inline">بحث مريض...</span>
-                            <kbd class="small bg-white bg-opacity-25 text-white px-1 rounded d-none d-lg-inline">Ctrl+K</kbd>
+                        <!-- Global Quick Search Trigger -->
+                        <button class="topbar-search-btn shadow-sm" type="button" data-bs-toggle="modal" data-bs-target="#quickSearchModal">
+                            <i data-lucide="search" style="width: 16px; height: 16px; color: var(--hms-green);"></i>
+                            <span class="d-none d-sm-inline">بحث سريع عن مريض...</span>
+                            <kbd class="small bg-white text-dark border px-1 rounded shadow-sm d-none d-md-inline">Ctrl+K</kbd>
                         </button>
                     <?php endif; ?>
+                </div>
 
-                    <!-- Theme Mode Toggle -->
-                    <button class="btn btn-sm btn-outline-light d-flex align-items-center p-2 rounded-circle" id="themeToggleBtn" title="تبديل الوضع الليلي/النهاري">
-                        <i data-lucide="moon" id="themeIcon" style="width: 16px; height: 16px;"></i>
+                <!-- Topbar Right Tools -->
+                <div class="d-flex align-items-center gap-2 gap-sm-3">
+                    <!-- Quick Emergency & Bankak Badges -->
+                    <div class="d-none d-lg-flex align-items-center gap-2 small">
+                        <span class="badge bg-danger-subtle text-danger border border-danger-subtle py-1 px-2 d-flex align-items-center gap-1">
+                            <i data-lucide="phone-call" style="width: 12px; height: 12px;"></i>
+                            <span>طوارئ: <?= e($emergencyPhone) ?></span>
+                        </span>
+                        <span class="badge bg-success-subtle text-success border border-success-subtle py-1 px-2 d-flex align-items-center gap-1">
+                            <i data-lucide="landmark" style="width: 12px; height: 12px;"></i>
+                            <span>بنكك: <?= e($bankakAccount) ?></span>
+                        </span>
+                    </div>
+
+                    <!-- Theme Toggle -->
+                    <button class="topbar-toggle-btn" id="themeToggleBtn" title="تبديل الوضع الليلي / النهاري">
+                        <i data-lucide="moon" id="themeIcon" style="width: 18px; height: 18px;"></i>
                     </button>
 
                     <!-- Language Switcher -->
                     <?php if ($locale === 'ar'): ?>
-                        <a href="<?= url('/lang?lang=en') ?>" class="btn btn-sm btn-light fw-bold px-2 py-1 fs-7">EN</a>
+                        <a href="<?= url('/lang?lang=en') ?>" class="btn btn-sm btn-outline-secondary fw-bold px-2 py-1 fs-7">EN</a>
                     <?php else: ?>
-                        <a href="<?= url('/lang?lang=ar') ?>" class="btn btn-sm btn-light fw-bold px-2 py-1 fs-7">عربي</a>
+                        <a href="<?= url('/lang?lang=ar') ?>" class="btn btn-sm btn-outline-secondary fw-bold px-2 py-1 fs-7">عربي</a>
                     <?php endif; ?>
 
-                    <!-- User Dropdown or Login Button -->
+                    <!-- User Dropdown or Login -->
                     <?php if (auth()->check()): ?>
                         <div class="dropdown">
-                            <button class="btn btn-sm btn-outline-light dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
-                                <i data-lucide="user-check" style="width: 16px; height: 16px;"></i>
-                                <span class="d-none d-md-inline"><?= e($user['full_name'] ?? 'المستخدم') ?></span>
+                            <button class="btn btn-sm btn-light border dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
+                                <i data-lucide="user-check" style="width: 16px; height: 16px; color: var(--hms-green);"></i>
+                                <span class="d-none d-md-inline fw-semibold"><?= e($user['full_name'] ?? 'المستخدم') ?></span>
                             </button>
-                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-hms shadow">
-                                <li>
-                                    <div class="px-3 py-1">
-                                        <strong class="d-block text-navy"><?= e($user['full_name'] ?? 'مستخدم') ?></strong>
-                                        <small class="text-muted">@<?= e($user['username']) ?></small>
-                                    </div>
+                            <ul class="dropdown-menu dropdown-menu-end shadow border-0" style="border-radius: 10px;">
+                                <li class="px-3 py-2 border-bottom">
+                                    <strong class="d-block text-navy"><?= e($user['full_name'] ?? 'مستخدم') ?></strong>
+                                    <small class="text-muted">@<?= e($user['username']) ?></small>
                                 </li>
-                                <li><hr class="dropdown-divider my-1"></li>
                                 <li>
-                                    <a class="dropdown-item dropdown-item-hms" href="<?= url('/profile') ?>">
-                                        <i data-lucide="user" style="width: 16px; height: 16px;"></i>
+                                    <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="<?= url('/profile') ?>">
+                                        <i data-lucide="user" style="width: 15px; height: 15px;"></i>
                                         <span>الملف الشخصي وكلمة المرور</span>
                                     </a>
                                 </li>
-                                <li><hr class="dropdown-divider my-1"></li>
+                                <li><hr class="dropdown-divider my-0"></li>
                                 <li>
                                     <form action="<?= url('/logout') ?>" method="POST" class="m-0">
                                         <?= csrf_field() ?>
-                                        <button type="submit" class="dropdown-item dropdown-item-hms text-danger">
-                                            <i data-lucide="log-out" style="width: 16px; height: 16px;"></i>
+                                        <button type="submit" class="dropdown-item text-danger d-flex align-items-center gap-2 py-2">
+                                            <i data-lucide="log-out" style="width: 15px; height: 15px;"></i>
                                             <span>تسجيل الخروج</span>
                                         </button>
                                     </form>
@@ -567,62 +637,74 @@ $user = current_user();
                             </ul>
                         </div>
                     <?php else: ?>
-                        <a href="<?= url('/login') ?>" class="btn btn-sm btn-light fw-bold px-3">
+                        <a href="<?= url('/login') ?>" class="btn btn-sm btn-hms-primary fw-bold px-3">
                             <i data-lucide="log-in" style="width: 16px; height: 16px; display:inline-block; vertical-align:text-bottom;"></i>
                             تسجيل الدخول
                         </a>
                     <?php endif; ?>
                 </div>
-            </div>
+            </header>
+
+            <!-- Main Body Container -->
+            <main class="py-4 flex-grow-1">
+                <div class="container-fluid px-3 px-xl-4">
+                    <!-- Standard Breadcrumbs -->
+                    <?php if (isset($breadcrumbs) && is_array($breadcrumbs)): ?>
+                        <nav aria-label="breadcrumb" class="mb-3">
+                            <ol class="breadcrumb small">
+                                <?php foreach ($breadcrumbs as $index => $crumb): ?>
+                                    <?php if ($index === count($breadcrumbs) - 1 || empty($crumb['url'])): ?>
+                                        <li class="breadcrumb-item active fw-bold text-navy" aria-current="page"><?= e($crumb['label']) ?></li>
+                                    <?php else: ?>
+                                        <li class="breadcrumb-item"><a href="<?= e($crumb['url']) ?>" class="text-decoration-none text-green"><?= e($crumb['label']) ?></a></li>
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
+                            </ol>
+                        </nav>
+                    <?php endif; ?>
+
+                    <!-- Flash Notifications -->
+                    <?php if (\App\Core\Session::hasFlash('success')): ?>
+                        <div class="alert alert-success alert-dismissible fade show d-flex align-items-center gap-2 mb-4 shadow-sm" role="alert">
+                            <i data-lucide="check-circle" style="width: 20px; height: 20px; flex-shrink: 0;"></i>
+                            <div><?= e(\App\Core\Session::getFlash('success')) ?></div>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (\App\Core\Session::hasFlash('error')): ?>
+                        <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center gap-2 mb-4 shadow-sm" role="alert">
+                            <i data-lucide="alert-octagon" style="width: 20px; height: 20px; flex-shrink: 0;"></i>
+                            <div><?= e(\App\Core\Session::getFlash('error')) ?></div>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (\App\Core\Session::hasFlash('info')): ?>
+                        <div class="alert alert-info alert-dismissible fade show d-flex align-items-center gap-2 mb-4 shadow-sm" role="alert">
+                            <i data-lucide="info" style="width: 20px; height: 20px; flex-shrink: 0;"></i>
+                            <div><?= e(\App\Core\Session::getFlash('info')) ?></div>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    <?php endif; ?>
+
+                    <?= $content ?>
+                </div>
+            </main>
+
+            <!-- Footer -->
+            <footer class="text-muted">
+                <div class="container-fluid px-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
+                    <div>
+                        <strong class="text-navy"><?= e($hospitalName) ?></strong> &bull; نظام الإدارة الطبية المتكاملة
+                    </div>
+                    <div class="small">
+                        <span>الجمهورية السودانية &bull; العملة: <strong>SDG</strong> &bull; PHP <?= PHP_VERSION ?> &bull; <?= date('Y') ?></span>
+                    </div>
+                </div>
+            </footer>
         </div>
-    </nav>
-
-    <!-- Main Body Container -->
-    <main class="py-4 flex-grow-1">
-        <div class="container-fluid px-3 px-xl-4">
-            <!-- Breadcrumbs -->
-            <?php if (isset($breadcrumbs) && is_array($breadcrumbs)): ?>
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb breadcrumb-hms">
-                        <?php foreach ($breadcrumbs as $index => $crumb): ?>
-                            <?php if ($index === count($breadcrumbs) - 1 || empty($crumb['url'])): ?>
-                                <li class="breadcrumb-item active" aria-current="page"><?= e($crumb['label']) ?></li>
-                            <?php else: ?>
-                                <li class="breadcrumb-item"><a href="<?= e($crumb['url']) ?>"><?= e($crumb['label']) ?></a></li>
-                            <?php endif; ?>
-                        <?php endforeach; ?>
-                    </ol>
-                </nav>
-            <?php endif; ?>
-
-            <!-- Flash Notifications -->
-            <?php if (\App\Core\Session::hasFlash('success')): ?>
-                <div class="alert alert-success alert-dismissible fade show d-flex align-items-center gap-2 mb-4" role="alert">
-                    <i data-lucide="check-circle" style="width: 20px; height: 20px; flex-shrink: 0;"></i>
-                    <div><?= e(\App\Core\Session::getFlash('success')) ?></div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            <?php endif; ?>
-
-            <?php if (\App\Core\Session::hasFlash('error')): ?>
-                <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center gap-2 mb-4" role="alert">
-                    <i data-lucide="alert-octagon" style="width: 20px; height: 20px; flex-shrink: 0;"></i>
-                    <div><?= e(\App\Core\Session::getFlash('error')) ?></div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            <?php endif; ?>
-
-            <?php if (\App\Core\Session::hasFlash('info')): ?>
-                <div class="alert alert-info alert-dismissible fade show d-flex align-items-center gap-2 mb-4" role="alert">
-                    <i data-lucide="info" style="width: 20px; height: 20px; flex-shrink: 0;"></i>
-                    <div><?= e(\App\Core\Session::getFlash('info')) ?></div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            <?php endif; ?>
-
-            <?= $content ?>
-        </div>
-    </main>
+    </div>
 
     <!-- Quick Search Modal -->
     <?php if (auth()->check()): ?>
@@ -667,25 +749,51 @@ $user = current_user();
         </div>
     <?php endif; ?>
 
-    <!-- Footer -->
-    <footer class="text-center text-muted">
-        <div class="container-fluid px-4 d-flex flex-wrap justify-content-between align-items-center gap-2">
-            <div>
-                <strong class="text-navy"><?= e(config('app.name')) ?></strong> &bull; <?= __('messages.footer_text') ?>
-            </div>
-            <div class="small">
-                <span>الجمهورية السودانية &bull; العملة: <strong>SDG</strong> &bull; PHP <?= PHP_VERSION ?> &bull; <?= date('Y') ?></span>
-            </div>
-        </div>
-    </footer>
-
     <!-- Bootstrap 5 Bundle JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
         lucide.createIcons();
 
-        // Theme Toggle
+        // ---------------- Sidebar Toggle & Persistence ----------------
+        const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
+        const backdrop = document.getElementById('sidebar-backdrop');
+        const isMobile = () => window.innerWidth < 992;
+
+        // Restore desktop collapse state
+        const savedSidebarState = localStorage.getItem('hms_sidebar_state');
+        if (!isMobile() && savedSidebarState === 'collapsed') {
+            document.body.classList.add('sidebar-collapsed');
+        }
+
+        if (sidebarToggleBtn) {
+            sidebarToggleBtn.addEventListener('click', () => {
+                if (isMobile()) {
+                    document.body.classList.toggle('mobile-sidebar-open');
+                } else {
+                    document.body.classList.toggle('sidebar-collapsed');
+                    const currentState = document.body.classList.contains('sidebar-collapsed') ? 'collapsed' : 'expanded';
+                    localStorage.setItem('hms_sidebar_state', currentState);
+                }
+            });
+        }
+
+        if (backdrop) {
+            backdrop.addEventListener('click', () => {
+                document.body.classList.remove('mobile-sidebar-open');
+            });
+        }
+
+        // Close mobile drawer on link click
+        document.querySelectorAll('.nav-item-hms').forEach(link => {
+            link.addEventListener('click', () => {
+                if (isMobile()) {
+                    document.body.classList.remove('mobile-sidebar-open');
+                }
+            });
+        });
+
+        // ---------------- Theme Toggle ----------------
         const themeToggleBtn = document.getElementById('themeToggleBtn');
         const themeIcon = document.getElementById('themeIcon');
         const htmlElement = document.documentElement;
@@ -713,7 +821,7 @@ $user = current_user();
             lucide.createIcons();
         }
 
-        // Global Shortcut: Ctrl+K / Cmd+K for Quick Search
+        // ---------------- Global Shortcut: Ctrl+K / Cmd+K ----------------
         const searchModalEl = document.getElementById('quickSearchModal');
         let searchModal = null;
         if (searchModalEl) {
@@ -729,7 +837,7 @@ $user = current_user();
             }
         });
 
-        // Quick Search AJAX Implementation
+        // ---------------- Quick Search AJAX Implementation ----------------
         const searchInput = document.getElementById('globalPatientSearchInput');
         const searchResults = document.getElementById('quickSearchResults');
         const clearBtn = document.getElementById('clearQuickSearchBtn');
@@ -796,7 +904,7 @@ $user = current_user();
                                                 <i data-lucide="folder-heart" style="width: 14px; height: 14px; display:inline-block; vertical-align:text-bottom;"></i>
                                                 الملف الطبي
                                             </a>
-                                            <a href="${pt.emr_url}" class="btn btn-sm btn-outline-success">
+                                            <a href="<?= url('/emr') ?>" class="btn btn-sm btn-outline-success">
                                                 <i data-lucide="stethoscope" style="width: 14px; height: 14px; display:inline-block; vertical-align:text-bottom;"></i>
                                                 العيادة EMR
                                             </a>
