@@ -46,15 +46,17 @@ $emergencyPhone = \App\Models\SystemSetting::get('emergency_hotline', '999');
             --hms-font: <?= $isRtl ? "'Cairo', sans-serif" : "'Inter', -apple-system, sans-serif" ?>;
         }
 
-        body {
+        html, body {
+            height: 100vh;
+            max-height: 100vh;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Eliminates outer window scrollbar */
             font-family: var(--hms-font);
             font-size: 15.5px;
             line-height: 1.6;
             background-color: var(--hms-light-bg);
             color: #1E293B;
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
         }
 
@@ -70,8 +72,10 @@ $emergencyPhone = \App\Models\SystemSetting::get('emergency_hotline', '999');
         /* ---------------- App Layout Containers ---------------- */
         #app-layout {
             display: flex;
-            min-height: 100vh;
+            height: 100vh;
+            max-height: 100vh;
             width: 100%;
+            overflow: hidden;
         }
 
         /* ---------------- Sidebar Styling ---------------- */
@@ -214,13 +218,61 @@ $emergencyPhone = \App\Models\SystemSetting::get('emergency_hotline', '999');
             min-width: 0;
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
+            height: 100vh;
+            max-height: 100vh;
+            overflow: hidden;
             <?= $isRtl ? 'margin-right: var(--hms-sidebar-width);' : 'margin-left: var(--hms-sidebar-width);' ?>
             transition: <?= $isRtl ? 'margin-right' : 'margin-left' ?> 0.24s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         body.sidebar-collapsed #hms-main-wrapper {
             <?= $isRtl ? 'margin-right: var(--hms-sidebar-collapsed-width);' : 'margin-left: var(--hms-sidebar-collapsed-width);' ?>
+        }
+
+        /* Dedicated Dashboard Scroll Container */
+        #hms-content-canvas {
+            flex-grow: 1;
+            height: calc(100vh - var(--hms-topbar-height));
+            overflow-y: auto;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            scroll-behavior: smooth;
+            scrollbar-width: thin;
+            scrollbar-color: #94A3B8 rgba(0, 0, 0, 0.03);
+        }
+
+        /* Distinctive Custom Medical Scrollbar */
+        #hms-content-canvas::-webkit-scrollbar {
+            width: 8px;
+        }
+        #hms-content-canvas::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.03);
+            border-radius: 8px;
+        }
+        #hms-content-canvas::-webkit-scrollbar-thumb {
+            background: #94A3B8;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            background-clip: content-box;
+            transition: all 0.2s ease;
+        }
+        #hms-content-canvas::-webkit-scrollbar-thumb:hover {
+            background: var(--hms-green);
+            background-clip: border-box;
+        }
+
+        [data-bs-theme="dark"] #hms-content-canvas {
+            scrollbar-color: #475569 rgba(255, 255, 255, 0.02);
+        }
+        [data-bs-theme="dark"] #hms-content-canvas::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        [data-bs-theme="dark"] #hms-content-canvas::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+        [data-bs-theme="dark"] #hms-content-canvas::-webkit-scrollbar-thumb:hover {
+            background: #10B981;
         }
 
         /* ---------------- Sleek Topbar ---------------- */
@@ -658,64 +710,67 @@ $emergencyPhone = \App\Models\SystemSetting::get('emergency_hotline', '999');
                 </div>
             </header>
 
-            <!-- Main Body Container -->
-            <main class="py-4 flex-grow-1">
-                <div class="container-fluid px-3 px-xl-4">
-                    <!-- Standard Breadcrumbs -->
-                    <?php if (isset($breadcrumbs) && is_array($breadcrumbs)): ?>
-                        <nav aria-label="breadcrumb" class="mb-3">
-                            <ol class="breadcrumb small">
-                                <?php foreach ($breadcrumbs as $index => $crumb): ?>
-                                    <?php if ($index === count($breadcrumbs) - 1 || empty($crumb['url'])): ?>
-                                        <li class="breadcrumb-item active fw-bold text-navy" aria-current="page"><?= e($crumb['label']) ?></li>
-                                    <?php else: ?>
-                                        <li class="breadcrumb-item"><a href="<?= e($crumb['url']) ?>" class="text-decoration-none text-green"><?= e($crumb['label']) ?></a></li>
-                                    <?php endif; ?>
-                                <?php endforeach; ?>
-                            </ol>
-                        </nav>
-                    <?php endif; ?>
+            <!-- Dedicated Dashboard Content Canvas with Custom Scrollbar -->
+            <div id="hms-content-canvas">
+                <!-- Main Body Container -->
+                <main class="py-4 flex-grow-1">
+                    <div class="container-fluid px-3 px-xl-4">
+                        <!-- Standard Breadcrumbs -->
+                        <?php if (isset($breadcrumbs) && is_array($breadcrumbs)): ?>
+                            <nav aria-label="breadcrumb" class="mb-3">
+                                <ol class="breadcrumb small">
+                                    <?php foreach ($breadcrumbs as $index => $crumb): ?>
+                                        <?php if ($index === count($breadcrumbs) - 1 || empty($crumb['url'])): ?>
+                                            <li class="breadcrumb-item active fw-bold text-navy" aria-current="page"><?= e($crumb['label']) ?></li>
+                                        <?php else: ?>
+                                            <li class="breadcrumb-item"><a href="<?= e($crumb['url']) ?>" class="text-decoration-none text-green"><?= e($crumb['label']) ?></a></li>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
+                                </ol>
+                            </nav>
+                        <?php endif; ?>
 
-                    <!-- Flash Notifications -->
-                    <?php if (\App\Core\Session::hasFlash('success')): ?>
-                        <div class="alert alert-success alert-dismissible fade show d-flex align-items-center gap-2 mb-4 shadow-sm" role="alert">
-                            <i data-lucide="check-circle" style="width: 20px; height: 20px; flex-shrink: 0;"></i>
-                            <div><?= e(\App\Core\Session::getFlash('success')) ?></div>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                    <?php endif; ?>
+                        <!-- Flash Notifications -->
+                        <?php if (\App\Core\Session::hasFlash('success')): ?>
+                            <div class="alert alert-success alert-dismissible fade show d-flex align-items-center gap-2 mb-4 shadow-sm" role="alert">
+                                <i data-lucide="check-circle" style="width: 20px; height: 20px; flex-shrink: 0;"></i>
+                                <div><?= e(\App\Core\Session::getFlash('success')) ?></div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        <?php endif; ?>
 
-                    <?php if (\App\Core\Session::hasFlash('error')): ?>
-                        <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center gap-2 mb-4 shadow-sm" role="alert">
-                            <i data-lucide="alert-octagon" style="width: 20px; height: 20px; flex-shrink: 0;"></i>
-                            <div><?= e(\App\Core\Session::getFlash('error')) ?></div>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                    <?php endif; ?>
+                        <?php if (\App\Core\Session::hasFlash('error')): ?>
+                            <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center gap-2 mb-4 shadow-sm" role="alert">
+                                <i data-lucide="alert-octagon" style="width: 20px; height: 20px; flex-shrink: 0;"></i>
+                                <div><?= e(\App\Core\Session::getFlash('error')) ?></div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        <?php endif; ?>
 
-                    <?php if (\App\Core\Session::hasFlash('info')): ?>
-                        <div class="alert alert-info alert-dismissible fade show d-flex align-items-center gap-2 mb-4 shadow-sm" role="alert">
-                            <i data-lucide="info" style="width: 20px; height: 20px; flex-shrink: 0;"></i>
-                            <div><?= e(\App\Core\Session::getFlash('info')) ?></div>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                    <?php endif; ?>
+                        <?php if (\App\Core\Session::hasFlash('info')): ?>
+                            <div class="alert alert-info alert-dismissible fade show d-flex align-items-center gap-2 mb-4 shadow-sm" role="alert">
+                                <i data-lucide="info" style="width: 20px; height: 20px; flex-shrink: 0;"></i>
+                                <div><?= e(\App\Core\Session::getFlash('info')) ?></div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        <?php endif; ?>
 
-                    <?= $content ?>
-                </div>
-            </main>
-
-            <!-- Footer -->
-            <footer class="text-muted">
-                <div class="container-fluid px-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
-                    <div>
-                        <strong class="text-navy"><?= e($hospitalName) ?></strong> &bull; نظام الإدارة الطبية المتكاملة
+                        <?= $content ?>
                     </div>
-                    <div class="small">
-                        <span>الجمهورية السودانية &bull; العملة: <strong>SDG</strong> &bull; PHP <?= PHP_VERSION ?> &bull; <?= date('Y') ?></span>
+                </main>
+
+                <!-- Footer -->
+                <footer class="text-muted">
+                    <div class="container-fluid px-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
+                        <div>
+                            <strong class="text-navy"><?= e($hospitalName) ?></strong> &bull; نظام الإدارة الطبية المتكاملة
+                        </div>
+                        <div class="small">
+                            <span>الجمهورية السودانية &bull; العملة: <strong>SDG</strong> &bull; PHP <?= PHP_VERSION ?> &bull; <?= date('Y') ?></span>
+                        </div>
                     </div>
-                </div>
-            </footer>
+                </footer>
+            </div>
         </div>
     </div>
 
