@@ -99,7 +99,15 @@ if (!function_exists('session')) {
 if (!function_exists('url')) {
     function url(string $path = ''): string
     {
-        $base = rtrim(config('app.url', 'http://localhost:8080'), '/');
+        if (isset($_SERVER['HTTP_HOST'])) {
+            $isHttps = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ||
+                       (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') ||
+                       (isset($_SERVER['SERVER_PORT']) && (int)$_SERVER['SERVER_PORT'] === 443);
+            $scheme = $isHttps ? 'https' : 'http';
+            $base = $scheme . '://' . $_SERVER['HTTP_HOST'];
+        } else {
+            $base = rtrim(config('app.url', 'http://localhost:8080'), '/');
+        }
         return $base . '/' . ltrim($path, '/');
     }
 }
