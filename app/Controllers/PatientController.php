@@ -238,4 +238,56 @@ class PatientController extends Controller
         Session::flash('success', 'تم توثيق الحالة المرضية المزمنة بنجاح.');
         $this->redirect(url("/patients/{$id}"));
     }
+
+    /**
+     * Live Quick Search API for global top search and shortcut Ctrl+K
+     */
+    public function quickSearch(Request $request, Response $response): Response
+    {
+        $query = trim((string)$request->query('q', ''));
+        if (mb_strlen($query) < 2) {
+            return $response->json(['data' => []]);
+        }
+
+        $sql = "SELECT p.id, p.mrn, 
+                       CONCAT(p.first_name, ' ', COALESCE(p.second_name, ''), ' ', p.last_name) AS full_name,
+                       p.phone_primary, p.national_id, p.gender,
+                       TIMESTAMPDIFF(YEAR, p.date_of_birth, CURDATE()) AS age
+                FROM `patients` p
+                WHERE `mrn` LIKE :q1 
+                   OR `national_id` LIKE :q2 
+                   OR `phone_primary` LIKE :q3 
+                   OR `first_name` LIKE :q4 
+                   OR `last_name` LIKE :q5 
+                   OR CONCAT(`first_name`, ' ', COALESCE(`second_name`, ''), ' ', `last_name`) LIKE :q6
+                ORDER BY p.id DESC
+                LIMIT 8";
+
+        $db = \App\Core\Database::getInstance();
+        $term = "%{$query}%";
+        $rows = $db->fetchAll($sql, [
+            'q1' => $term,
+            'q2' => $term,
+            'q3' => $term,
+            'q4' => $term,
+            'q5' => $term,
+            'q6' => $term,
+        ]);
+
+        $results = array_map(function($pt) {
+            return [
+                'id' => (int)$pt['id'],
+                'mrn' => $pt['mrn'],
+                'name' => trim(preg_replace('/\s+/', ' ', $pt['full_name'])),
+                'phone' => $pt['phone_primary'],
+                'national_id' => $pt['national_id'],
+                'age' => $pt['age'],
+                'gender' => $pt['gender'],
+                'url' => url('/patients/' . $pt['id']),
+                'emr_url' => url('/emr'),
+            ];
+        }, $rows);
+
+        return $response->json(['data' => $results]);
+    }
 }

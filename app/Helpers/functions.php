@@ -148,6 +148,18 @@ if (!function_exists('active_route')) {
     }
 }
 
+if (!function_exists('active_group')) {
+    function active_group(array $uris, string $activeClass = 'active'): string
+    {
+        foreach ($uris as $u) {
+            if (active_route($u) !== '') {
+                return $activeClass;
+            }
+        }
+        return '';
+    }
+}
+
 if (!function_exists('auth')) {
     function auth(): \App\Services\AuthService
     {

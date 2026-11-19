@@ -41,6 +41,7 @@ $router->get('/reception', 'ReceptionController@index', [AuthMiddleware::class])
 
 // Patients Management (Phase 4)
 $router->get('/patients', 'PatientController@index', [AuthMiddleware::class]);
+$router->get('/patients/quick-search', 'PatientController@quickSearch', [AuthMiddleware::class]);
 $router->get('/patients/create', 'PatientController@create', [AuthMiddleware::class]);
 $router->post('/patients', 'PatientController@store', [AuthMiddleware::class, CsrfMiddleware::class]);
 $router->get('/patients/{id}', 'PatientController@show', [AuthMiddleware::class]);
