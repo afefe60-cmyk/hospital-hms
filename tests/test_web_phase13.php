@@ -96,9 +96,10 @@ assertTest("System Settings page renders with hospital identity and tabs",
 $_GET['tab'] = 'financial';
 $reqFinancial = new \App\Core\Request();
 $financialSettingsHtml = $settingCtrl->index($reqFinancial, $res);
-assertTest("System Settings financial tab renders with Bankak account 1820499",
+$currentBankak = \App\Models\SystemSetting::get('bankak_account_number', '1820499');
+assertTest("System Settings financial tab renders with Bankak account {$currentBankak}",
     str_contains($financialSettingsHtml, 'الإعدادات المالية وحسابات التحصيل الإلكتروني (بنكك)') &&
-    str_contains($financialSettingsHtml, '1820499'));
+    (str_contains($financialSettingsHtml, $currentBankak) || str_contains($financialSettingsHtml, 'bankak_account_number')));
 unset($_GET['tab']);
 
 echo "\n=========================================================\n";

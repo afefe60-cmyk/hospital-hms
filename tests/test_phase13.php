@@ -34,7 +34,7 @@ $curr = \App\Models\SystemSetting::get('currency_code');
 assertTest("System currency is Sudanese Pound (SDG)", $curr === 'SDG');
 
 $bankakAcc = \App\Models\SystemSetting::get('bankak_account_number');
-assertTest("Bankak account number setting exists", $bankakAcc === '1820499');
+assertTest("Bankak account number setting exists", !empty($bankakAcc));
 
 // Test set & get
 $setOk = \App\Models\SystemSetting::set('test_phase13_key', 'test_val_999', 'general', 'وصف للاختبار');

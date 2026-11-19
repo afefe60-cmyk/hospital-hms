@@ -8,39 +8,34 @@
 /** @var array $info */
 ?>
 
-<div class="row g-4">
-    <!-- 1. Executive Hospital Header Banner -->
+<div class="row g-3">
+    <!-- 1. Ultra-Slim Executive Operational Ribbon (شريط تنفيذي مدمج وفوري) -->
     <div class="col-12">
-        <div class="card card-hms p-4 text-white" style="background: linear-gradient(135deg, #10293D 0%, #173B59 60%, #16856D 100%);">
-            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="p-3 bg-white bg-opacity-10 rounded-3 border border-white border-opacity-25 d-none d-sm-block">
-                        <i data-lucide="hospital" style="width: 42px; height: 42px; color: #6EE7B7;"></i>
-                    </div>
-                    <div>
-                        <div class="d-flex align-items-center gap-2 flex-wrap">
-                            <h2 class="fw-bold mb-0 text-white"><?= e($hospital['name_ar']) ?></h2>
-                            <span class="badge bg-green px-2 py-1 fs-7">نظام تشغيلي متكامل</span>
-                            <span class="badge bg-accent px-2 py-1 fs-7">الخرطوم، السودان</span>
-                        </div>
-                        <div class="text-light opacity-75 mt-1 small d-flex flex-wrap align-items-center gap-3">
-                            <span><i data-lucide="calendar" style="width: 14px; height: 14px; display:inline-block; vertical-align:text-bottom;"></i> <?= date('Y-m-d') ?> | <?= date('l') ?></span>
-                            <span><i data-lucide="phone-call" style="width: 14px; height: 14px; display:inline-block; vertical-align:text-bottom; color: #F87171;"></i> طوارئ: <strong><?= e($hospital['emergency']) ?></strong></span>
-                            <span><i data-lucide="landmark" style="width: 14px; height: 14px; display:inline-block; vertical-align:text-bottom; color: #34D399;"></i> حساب بنكك المعتمد: <strong class="badge bg-white text-navy"><?= e($hospital['bankak_account']) ?></strong></span>
-                        </div>
-                    </div>
+        <div class="card card-hms py-2 px-3 text-white border-0 shadow-sm" style="background: linear-gradient(135deg, #10293D 0%, #173B59 55%, #16856D 100%); border-radius: 10px;">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+                <!-- Right: Hospital Identity & Shift Status -->
+                <div class="d-flex align-items-center gap-2 flex-wrap">
+                    <span class="badge bg-white bg-opacity-20 text-white px-2.5 py-1.5 fs-7 d-flex align-items-center gap-1.5 fw-bold">
+                        <i data-lucide="hospital" style="width: 15px; height: 15px; color: #6EE7B7;"></i>
+                        <span><?= e($hospital['name_ar']) ?></span>
+                    </span>
+                    <span class="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1.5 fs-7 d-inline-flex align-items-center gap-1.5 fw-bold">
+                        <span class="p-1 rounded-circle bg-success d-inline-block"></span>
+                        الوردية الصباحية المعتمدة
+                    </span>
+                    <span class="text-light opacity-75 small d-none d-md-inline" style="font-size: 0.82rem;">
+                        <i data-lucide="calendar" style="width: 13px; height: 13px; display:inline-block; vertical-align:text-bottom;"></i>
+                        <?= date('Y-m-d') ?> | <?= date('l') ?>
+                    </span>
+                    <span class="text-light opacity-75 small d-none d-xl-inline" style="font-size: 0.82rem;">
+                        حساب بنكك: <strong class="badge bg-white text-navy py-0.5 px-1.5"><?= e($hospital['bankak_account']) ?></strong>
+                    </span>
                 </div>
 
-                <div class="d-flex align-items-center gap-2 flex-wrap">
-                    <div class="bg-white bg-opacity-10 px-3 py-2 rounded-3 border border-white border-opacity-25 text-end">
-                        <div class="small text-light opacity-75" style="font-size: 0.75rem;">الوردية التشغيلية الحالية</div>
-                        <strong class="text-white d-flex align-items-center gap-1 justify-content-end" style="font-size: 0.88rem;">
-                            <span class="p-1 rounded-circle bg-success d-inline-block"></span>
-                            الوردية الصباحية المعتمدة
-                        </strong>
-                    </div>
-                    <a href="<?= url('/reports') ?>" class="btn btn-sm btn-light text-navy d-flex align-items-center gap-1 fw-bold shadow-sm px-3 py-2">
-                        <i data-lucide="bar-chart-2" style="width: 16px; height: 16px;"></i>
+                <!-- Left: Quick Reports Button -->
+                <div class="d-flex align-items-center gap-2">
+                    <a href="<?= url('/reports') ?>" class="btn btn-sm btn-light text-navy d-flex align-items-center gap-1.5 fw-bold shadow-sm py-1 px-3 fs-7" style="border-radius: 6px;">
+                        <i data-lucide="bar-chart-2" style="width: 14px; height: 14px; color: var(--hms-green);"></i>
                         <span>التقارير الشاملة &larr;</span>
                     </a>
                 </div>
@@ -48,157 +43,157 @@
         </div>
     </div>
 
-    <!-- 2. Quick Action Launchpad (أزرار الإجراءات السريعة) -->
+    <!-- 2. Compact Quick Action Launchpad (مسارات العمليات المباشرة الرشيقة) -->
     <div class="col-12">
-        <div class="card card-hms p-3 bg-white">
-            <div class="d-flex align-items-center justify-content-between mb-2">
-                <span class="fw-bold text-navy small d-flex align-items-center gap-1">
-                    <i data-lucide="zap" class="text-accent" style="width: 16px; height: 16px;"></i>
+        <div class="card card-hms p-2.5 bg-white border-0 shadow-sm" style="border-radius: 10px;">
+            <div class="d-flex align-items-center justify-content-between px-1 mb-2">
+                <span class="fw-bold text-navy small d-flex align-items-center gap-1.5" style="font-size: 0.82rem;">
+                    <i data-lucide="zap" class="text-accent" style="width: 15px; height: 15px;"></i>
                     مسارات الوصول السريع والعمليات المباشرة (Quick Launchpad)
                 </span>
-                <span class="text-muted small">كل العمليات مرتبطة بلحظتها</span>
+                <span class="text-muted small d-none d-sm-inline" style="font-size: 0.76rem;">كل العمليات مرتبطة بلحظتها</span>
             </div>
             <div class="row g-2">
-                <div class="col-6 col-md-3 col-xl">
-                    <a href="<?= url('/patients/create') ?>" class="btn btn-outline-primary w-100 py-2 d-flex flex-column align-items-center justify-content-center gap-1 h-100">
-                        <i data-lucide="user-plus" style="width: 20px; height: 20px;"></i>
-                        <span class="small fw-bold">فتح ملف مريض</span>
+                <div class="col-6 col-sm-3 col-xl">
+                    <a href="<?= url('/patients/create') ?>" class="btn btn-sm btn-outline-primary w-100 py-1.5 px-1 d-flex align-items-center justify-content-center gap-1.5 text-nowrap shadow-none">
+                        <i data-lucide="user-plus" style="width: 15px; height: 15px; flex-shrink: 0;"></i>
+                        <span class="fw-bold" style="font-size: 0.82rem;">فتح ملف</span>
                     </a>
                 </div>
-                <div class="col-6 col-md-3 col-xl">
-                    <a href="<?= url('/emergency/create') ?>" class="btn btn-outline-danger w-100 py-2 d-flex flex-column align-items-center justify-content-center gap-1 h-100">
-                        <i data-lucide="ambulance" style="width: 20px; height: 20px;"></i>
-                        <span class="small fw-bold">استقبال طوارئ ER</span>
+                <div class="col-6 col-sm-3 col-xl">
+                    <a href="<?= url('/emergency/create') ?>" class="btn btn-sm btn-outline-danger w-100 py-1.5 px-1 d-flex align-items-center justify-content-center gap-1.5 text-nowrap shadow-none">
+                        <i data-lucide="ambulance" style="width: 15px; height: 15px; flex-shrink: 0;"></i>
+                        <span class="fw-bold" style="font-size: 0.82rem;">طوارئ ER</span>
                     </a>
                 </div>
-                <div class="col-6 col-md-3 col-xl">
-                    <a href="<?= url('/emr') ?>" class="btn btn-outline-success w-100 py-2 d-flex flex-column align-items-center justify-content-center gap-1 h-100">
-                        <i data-lucide="stethoscope" style="width: 20px; height: 20px;"></i>
-                        <span class="small fw-bold">عيادة الطبيب EMR</span>
+                <div class="col-6 col-sm-3 col-xl">
+                    <a href="<?= url('/emr') ?>" class="btn btn-sm btn-outline-success w-100 py-1.5 px-1 d-flex align-items-center justify-content-center gap-1.5 text-nowrap shadow-none">
+                        <i data-lucide="stethoscope" style="width: 15px; height: 15px; flex-shrink: 0;"></i>
+                        <span class="fw-bold" style="font-size: 0.82rem;">عيادة EMR</span>
                     </a>
                 </div>
-                <div class="col-6 col-md-3 col-xl">
-                    <a href="<?= url('/admissions/create') ?>" class="btn btn-outline-info w-100 py-2 d-flex flex-column align-items-center justify-content-center gap-1 h-100">
-                        <i data-lucide="bed" style="width: 20px; height: 20px;"></i>
-                        <span class="small fw-bold">تنويم سريري IPD</span>
+                <div class="col-6 col-sm-3 col-xl">
+                    <a href="<?= url('/admissions/create') ?>" class="btn btn-sm btn-outline-info w-100 py-1.5 px-1 d-flex align-items-center justify-content-center gap-1.5 text-nowrap shadow-none">
+                        <i data-lucide="bed" style="width: 15px; height: 15px; flex-shrink: 0;"></i>
+                        <span class="fw-bold" style="font-size: 0.82rem;">تنويم IPD</span>
                     </a>
                 </div>
-                <div class="col-6 col-md-3 col-xl">
-                    <a href="<?= url('/surgery/create') ?>" class="btn btn-outline-secondary w-100 py-2 d-flex flex-column align-items-center justify-content-center gap-1 h-100">
-                        <i data-lucide="scissors" style="width: 20px; height: 20px;"></i>
-                        <span class="small fw-bold">جدولة عملية OR</span>
+                <div class="col-6 col-sm-3 col-xl">
+                    <a href="<?= url('/surgery/create') ?>" class="btn btn-sm btn-outline-secondary w-100 py-1.5 px-1 d-flex align-items-center justify-content-center gap-1.5 text-nowrap shadow-none">
+                        <i data-lucide="scissors" style="width: 15px; height: 15px; flex-shrink: 0;"></i>
+                        <span class="fw-bold" style="font-size: 0.82rem;">عملية OR</span>
                     </a>
                 </div>
-                <div class="col-6 col-md-3 col-xl">
-                    <a href="<?= url('/lab/create') ?>" class="btn btn-outline-warning w-100 py-2 d-flex flex-column align-items-center justify-content-center gap-1 h-100">
-                        <i data-lucide="test-tube" style="width: 20px; height: 20px;"></i>
-                        <span class="small fw-bold">طلب فحص LIS</span>
+                <div class="col-6 col-sm-3 col-xl">
+                    <a href="<?= url('/lab/create') ?>" class="btn btn-sm btn-outline-warning w-100 py-1.5 px-1 d-flex align-items-center justify-content-center gap-1.5 text-nowrap shadow-none">
+                        <i data-lucide="test-tube" style="width: 15px; height: 15px; flex-shrink: 0;"></i>
+                        <span class="fw-bold" style="font-size: 0.82rem;">فحص LIS</span>
                     </a>
                 </div>
-                <div class="col-6 col-md-3 col-xl">
-                    <a href="<?= url('/pharmacy') ?>" class="btn btn-outline-success w-100 py-2 d-flex flex-column align-items-center justify-content-center gap-1 h-100">
-                        <i data-lucide="pill" style="width: 20px; height: 20px;"></i>
-                        <span class="small fw-bold">صرف صيدلية</span>
+                <div class="col-6 col-sm-3 col-xl">
+                    <a href="<?= url('/pharmacy') ?>" class="btn btn-sm btn-outline-success w-100 py-1.5 px-1 d-flex align-items-center justify-content-center gap-1.5 text-nowrap shadow-none">
+                        <i data-lucide="pill" style="width: 15px; height: 15px; flex-shrink: 0;"></i>
+                        <span class="fw-bold" style="font-size: 0.82rem;">صيدلية</span>
                     </a>
                 </div>
-                <div class="col-6 col-md-3 col-xl">
-                    <a href="<?= url('/billing/invoices/create') ?>" class="btn btn-outline-dark w-100 py-2 d-flex flex-column align-items-center justify-content-center gap-1 h-100">
-                        <i data-lucide="receipt" style="width: 20px; height: 20px;"></i>
-                        <span class="small fw-bold">فاتورة / سند قبض</span>
+                <div class="col-6 col-sm-3 col-xl">
+                    <a href="<?= url('/billing/invoices/create') ?>" class="btn btn-sm btn-outline-dark w-100 py-1.5 px-1 d-flex align-items-center justify-content-center gap-1.5 text-nowrap shadow-none">
+                        <i data-lucide="receipt" style="width: 15px; height: 15px; flex-shrink: 0;"></i>
+                        <span class="fw-bold" style="font-size: 0.82rem;">سند / فاتورة</span>
                     </a>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 3. Key Operational KPI Cards Strip -->
+    <!-- 3. Key Operational KPI Cards Strip (مؤشرات الأداء الحية المدمجة) -->
     <div class="col-sm-6 col-lg-4 col-xl-2">
-        <div class="card card-hms p-3 bg-white h-100 border-start border-4 border-primary">
+        <div class="card card-hms p-2.5 bg-white h-100 border-start border-4 border-primary shadow-sm" style="border-radius: 8px;">
             <div class="d-flex justify-content-between align-items-start">
                 <div>
-                    <small class="text-muted d-block fw-semibold">مرضى اليوم</small>
-                    <h3 class="fw-bold text-navy my-1"><?= number_format($metrics['today_visits']) ?></h3>
-                    <small class="text-secondary">إجمالي الملفات: <?= number_format($metrics['total_patients']) ?></small>
+                    <small class="text-muted d-block fw-semibold" style="font-size: 0.8rem;">مرضى اليوم</small>
+                    <h4 class="fw-bold text-navy my-0.5"><?= number_format($metrics['today_visits']) ?></h4>
+                    <small class="text-secondary" style="font-size: 0.74rem;">إجمالي الملفات: <?= number_format($metrics['total_patients']) ?></small>
                 </div>
-                <div class="p-2 rounded bg-primary-subtle text-primary">
-                    <i data-lucide="users" style="width: 22px; height: 22px;"></i>
+                <div class="p-1.5 rounded bg-primary-subtle text-primary">
+                    <i data-lucide="users" style="width: 18px; height: 18px;"></i>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="col-sm-6 col-lg-4 col-xl-2">
-        <div class="card card-hms p-3 bg-white h-100 border-start border-4 border-info">
+        <div class="card card-hms p-2.5 bg-white h-100 border-start border-4 border-info shadow-sm" style="border-radius: 8px;">
             <div class="d-flex justify-content-between align-items-start">
                 <div>
-                    <small class="text-muted d-block fw-semibold">المنومين حالياً</small>
-                    <h3 class="fw-bold text-navy my-1"><?= number_format($metrics['active_inpatients']) ?></h3>
-                    <small class="text-secondary">في كافة الأجنحة</small>
+                    <small class="text-muted d-block fw-semibold" style="font-size: 0.8rem;">المنومين حالياً</small>
+                    <h4 class="fw-bold text-navy my-0.5"><?= number_format($metrics['active_inpatients']) ?></h4>
+                    <small class="text-secondary" style="font-size: 0.74rem;">في كافة الأجنحة</small>
                 </div>
-                <div class="p-2 rounded bg-info-subtle text-info">
-                    <i data-lucide="bed-double" style="width: 22px; height: 22px;"></i>
+                <div class="p-1.5 rounded bg-info-subtle text-info">
+                    <i data-lucide="bed-double" style="width: 18px; height: 18px;"></i>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="col-sm-6 col-lg-4 col-xl-2">
-        <div class="card card-hms p-3 bg-white h-100 border-start border-4 <?= $metrics['bed_occupancy_rate'] > 85 ? 'border-danger' : 'border-success' ?>">
+        <div class="card card-hms p-2.5 bg-white h-100 border-start border-4 <?= $metrics['bed_occupancy_rate'] > 85 ? 'border-danger' : 'border-success' ?> shadow-sm" style="border-radius: 8px;">
             <div class="d-flex justify-content-between align-items-start">
                 <div>
-                    <small class="text-muted d-block fw-semibold">إشغال الأسرة</small>
-                    <h3 class="fw-bold <?= $metrics['bed_occupancy_rate'] > 85 ? 'text-danger' : 'text-green' ?> my-1">
+                    <small class="text-muted d-block fw-semibold" style="font-size: 0.8rem;">إشغال الأسرة</small>
+                    <h4 class="fw-bold <?= $metrics['bed_occupancy_rate'] > 85 ? 'text-danger' : 'text-green' ?> my-0.5">
                         <?= $metrics['bed_occupancy_rate'] ?>%
-                    </h3>
-                    <small class="text-secondary"><?= $metrics['available_beds'] ?> سرير شاغر</small>
+                    </h4>
+                    <small class="text-secondary" style="font-size: 0.74rem;"><?= $metrics['available_beds'] ?> سرير شاغر</small>
                 </div>
-                <div class="p-2 rounded bg-success-subtle text-success">
-                    <i data-lucide="activity" style="width: 22px; height: 22px;"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-sm-6 col-lg-4 col-xl-2">
-        <div class="card card-hms p-3 bg-white h-100 border-start border-4 border-danger">
-            <div class="d-flex justify-content-between align-items-start">
-                <div>
-                    <small class="text-muted d-block fw-semibold">حالات الطوارئ ER</small>
-                    <h3 class="fw-bold text-danger my-1"><?= number_format($metrics['today_er_cases']) ?></h3>
-                    <small class="text-secondary">حالات اليوم</small>
-                </div>
-                <div class="p-2 rounded bg-danger-subtle text-danger">
-                    <i data-lucide="ambulance" style="width: 22px; height: 22px;"></i>
+                <div class="p-1.5 rounded bg-success-subtle text-success">
+                    <i data-lucide="activity" style="width: 18px; height: 18px;"></i>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="col-sm-6 col-lg-4 col-xl-2">
-        <div class="card card-hms p-3 bg-white h-100 border-start border-4 border-secondary">
+        <div class="card card-hms p-2.5 bg-white h-100 border-start border-4 border-danger shadow-sm" style="border-radius: 8px;">
             <div class="d-flex justify-content-between align-items-start">
                 <div>
-                    <small class="text-muted d-block fw-semibold">عمليات جراحية</small>
-                    <h3 class="fw-bold text-navy my-1"><?= number_format($metrics['today_surgeries']) ?></h3>
-                    <small class="text-secondary">مجدولة اليوم</small>
+                    <small class="text-muted d-block fw-semibold" style="font-size: 0.8rem;">حالات الطوارئ ER</small>
+                    <h4 class="fw-bold text-danger my-0.5"><?= number_format($metrics['today_er_cases']) ?></h4>
+                    <small class="text-secondary" style="font-size: 0.74rem;">حالات اليوم</small>
                 </div>
-                <div class="p-2 rounded bg-secondary-subtle text-secondary">
-                    <i data-lucide="scissors" style="width: 22px; height: 22px;"></i>
+                <div class="p-1.5 rounded bg-danger-subtle text-danger">
+                    <i data-lucide="ambulance" style="width: 18px; height: 18px;"></i>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="col-sm-6 col-lg-4 col-xl-2">
-        <div class="card card-hms p-3 bg-white h-100 border-start border-4 border-warning">
+        <div class="card card-hms p-2.5 bg-white h-100 border-start border-4 border-secondary shadow-sm" style="border-radius: 8px;">
             <div class="d-flex justify-content-between align-items-start">
                 <div>
-                    <small class="text-muted d-block fw-semibold">تحصيل اليوم (ج.س)</small>
-                    <h4 class="fw-bold text-green my-1 fs-5"><?= number_format($metrics['today_collections_sdg']) ?></h4>
-                    <small class="text-muted" title="بنكك">بنكك: <?= number_format($metrics['today_bankak_sdg']) ?></small>
+                    <small class="text-muted d-block fw-semibold" style="font-size: 0.8rem;">عمليات جراحية</small>
+                    <h4 class="fw-bold text-navy my-0.5"><?= number_format($metrics['today_surgeries']) ?></h4>
+                    <small class="text-secondary" style="font-size: 0.74rem;">مجدولة اليوم</small>
                 </div>
-                <div class="p-2 rounded bg-warning-subtle text-warning">
-                    <i data-lucide="wallet" style="width: 22px; height: 22px;"></i>
+                <div class="p-1.5 rounded bg-secondary-subtle text-secondary">
+                    <i data-lucide="scissors" style="width: 18px; height: 18px;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-4 col-xl-2">
+        <div class="card card-hms p-2.5 bg-white h-100 border-start border-4 border-warning shadow-sm" style="border-radius: 8px;">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <small class="text-muted d-block fw-semibold" style="font-size: 0.8rem;">تحصيل اليوم (ج.س)</small>
+                    <h4 class="fw-bold text-green my-0.5"><?= number_format($metrics['today_collections_sdg']) ?></h4>
+                    <small class="text-muted" style="font-size: 0.74rem;" title="بنكك">بنكك: <?= number_format($metrics['today_bankak_sdg']) ?></small>
+                </div>
+                <div class="p-1.5 rounded bg-warning-subtle text-warning">
+                    <i data-lucide="wallet" style="width: 18px; height: 18px;"></i>
                 </div>
             </div>
         </div>

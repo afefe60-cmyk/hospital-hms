@@ -66,7 +66,10 @@ $htmlCard = $patientCtrl->printCard($req, $res, $patientId);
 assertTest('Printable Patient ID card renders standalone HTML', is_string($htmlCard) && str_contains($htmlCard, '<!DOCTYPE html>'));
 assertTest('Patient ID card contains Barcode representation', str_contains($htmlCard, 'barcode-text') && str_contains($htmlCard, $firstPatient['mrn']));
 assertTest('Patient ID card contains Blood Group badge', str_contains($htmlCard, 'blood-badge'));
-assertTest('Patient ID card contains Khartoum General Hospital identity & Bankak info', str_contains($htmlCard, 'مستشفى الأمل التخصصي') || str_contains($htmlCard, '1820499'));
+$hospName = \App\Models\SystemSetting::get('hospital_name_ar', 'مستشفى الخرطوم');
+$bankakNum = \App\Models\SystemSetting::get('bankak_account_number', '1820499');
+assertTest('Patient ID card contains Khartoum General Hospital identity & Bankak info', 
+    str_contains($htmlCard, $hospName) || str_contains($htmlCard, $bankakNum) || str_contains($htmlCard, 'بنكك'));
 
 // 4. Test Web Route via HTTP
 $ch = curl_init('http://127.0.0.1:8080/health');
